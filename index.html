@@ -95,6 +95,8 @@
             <button class="filter-btn" onclick="filtrar('Familia')">🏠 Familia</button>
             <button class="filter-btn" onclick="filtrar('Fiestas')">🎉 Fiestas</button>
             <button class="filter-btn" onclick="filtrar('Viajes')">✈️ Viajes</button>
+            <button class="filter-btn" onclick="filtrar('Recuerdos')">📜 Recuerdos</button>
+            <button class="filter-btn" onclick="filtrar('Jodedera')">🤣 Jodedera</button>
         </div>
 
         <label for="fotoInput" id="labelPost" class="btn-post">✨ SUBIR FOTO O HISTORIA</label>
@@ -104,6 +106,8 @@
                 <option value="Familia">🏠 Publicación Normal (Familia)</option>
                 <option value="Fiestas">🎉 Publicación Normal (Fiestas)</option>
                 <option value="Viajes">✈️ Publicación Normal (Viajes)</option>
+                <option value="Recuerdos">📜 Publicación Normal (Recuerdos)</option>
+                <option value="Jodedera">🤣 Publicación Normal (Jodedera)</option>
                 <option value="Historia">⏳ HISTORIA (Desaparece en 24h)</option>
             </select>
         </div>
@@ -155,17 +159,14 @@
         return n;
     };
 
-    // 🟢 ARRANQUE AUTOMÁTICO
     if(localStorage.getItem('familia_auth_lab')) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('app-content').style.display = 'block';
         getNombre();
     }
 
-    // 🟢 SISTEMA DE INGRESO CON BOTÓN (LIMPIA ESPACIOS)
     const intentarIngreso = () => {
-        const val = document.getElementById('passInput').value.trim().toLowerCase(); // trim() quita los espacios fantasma
-        
+        const val = document.getElementById('passInput').value.trim().toLowerCase(); 
         if(val === CLAVE_NORMAL || val === CLAVE_ADMIN) {
             localStorage.setItem('familia_auth_lab', val);
             document.getElementById('login-screen').style.display = 'none';
@@ -271,7 +272,18 @@
 
         snapshot.forEach((doc) => {
             const data = { id: doc.id, ...doc.data() };
-            const fechaPost = data.fecha ? data.fecha.toDate().getTime() : 0;
+            
+            // 🟢 EL TRADUCTOR DE FECHAS ANTI-FANTASMAS
+            let fechaPost = 0;
+            if (data.fecha) {
+                // Si la fecha viene de Firebase (Timestamp)
+                if (typeof data.fecha.toDate === 'function') {
+                    fechaPost = data.fecha.toDate().getTime();
+                } else {
+                    // Si la fecha acaba de ser creada en la PC
+                    fechaPost = new Date(data.fecha).getTime();
+                }
+            }
             
             if (data.categoria === "Historia") {
                 if (fechaPost > limite24h) {
