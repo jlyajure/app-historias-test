@@ -94,6 +94,7 @@
             <button class="filter-btn active" onclick="filtrar('Todo')">Todo</button>
             <button class="filter-btn" onclick="filtrar('Familia')">🏠 Familia</button>
             <button class="filter-btn" onclick="filtrar('Fiestas')">🎉 Fiestas</button>
+            <button class="filter-btn" onclick="filtrar('Celebración')">🍾 Celebración</button>
             <button class="filter-btn" onclick="filtrar('Viajes')">✈️ Viajes</button>
             <button class="filter-btn" onclick="filtrar('Recuerdos')">📜 Recuerdos</button>
             <button class="filter-btn" onclick="filtrar('Jodedera')">🤣 Jodedera</button>
@@ -105,6 +106,7 @@
             <select id="categoriaInput" class="category-select">
                 <option value="Familia">🏠 Publicación Normal (Familia)</option>
                 <option value="Fiestas">🎉 Publicación Normal (Fiestas)</option>
+                <option value="Celebración">🍾 Publicación Normal (Celebración)</option>
                 <option value="Viajes">✈️ Publicación Normal (Viajes)</option>
                 <option value="Recuerdos">📜 Publicación Normal (Recuerdos)</option>
                 <option value="Jodedera">🤣 Publicación Normal (Jodedera)</option>
@@ -273,14 +275,11 @@
         snapshot.forEach((doc) => {
             const data = { id: doc.id, ...doc.data() };
             
-            // 🟢 EL TRADUCTOR DE FECHAS ANTI-FANTASMAS
             let fechaPost = 0;
             if (data.fecha) {
-                // Si la fecha viene de Firebase (Timestamp)
                 if (typeof data.fecha.toDate === 'function') {
                     fechaPost = data.fecha.toDate().getTime();
                 } else {
-                    // Si la fecha acaba de ser creada en la PC
                     fechaPost = new Date(data.fecha).getTime();
                 }
             }
