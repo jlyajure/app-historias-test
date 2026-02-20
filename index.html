@@ -10,7 +10,7 @@
     
     <style>
         * { box-sizing: border-box; }
-        :root { --accent-blue: #3b82f6; --dark-bg: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); --wa-green: #25d366; --story-ring: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); }
+        :root { --accent-blue: #3b82f6; --dark-bg: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); --wa-green: #25d366; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; min-height: 100vh; background: var(--dark-bg); background-attachment: fixed; color: #f8fafc; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f172a; display: flex; align-items: flex-start; justify-content: center; z-index: 1000; padding-top: 100px; }
@@ -21,19 +21,29 @@
         header { background: rgba(15, 23, 42, 0.9); padding: 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .container { max-width: 480px; margin: auto; padding: 20px 15px; }
 
-        /* 🟢 MÓDULO DE HISTORIAS (ESTILOS NUEVOS) */
+        /* 🟢 MÓDULO DE HISTORIAS */
         #historias-container { display: none; margin-bottom: 20px; }
         .historias-title { font-size: 13px; font-weight: 800; color: #94a3b8; margin-bottom: 10px; margin-left: 5px; }
         .historias-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
         .historias-scroll::-webkit-scrollbar { display: none; }
         .story-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 65px; flex-shrink: 0; }
-        .story-ring { width: 65px; height: 65px; border-radius: 50%; background: var(--story-ring); padding: 3px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        
+        /* COLORES DEL ARO (VERDE: NUEVO, GRIS: VISTO) */
+        .story-ring { width: 65px; height: 65px; border-radius: 50%; padding: 3px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .story-ring.unseen { background: #25d366; } /* Verde WhatsApp */
+        .story-ring.seen { background: #cbd5e1; } /* Gris Visto */
+        
         .story-ring img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #0f172a; object-fit: cover; }
         .story-author { font-size: 11px; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: center; font-weight: 600; }
 
         /* VISOR DE HISTORIAS A PANTALLA COMPLETA */
         #story-viewer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 6000; flex-direction: column; }
-        .story-header { position: absolute; top: 0; left: 0; width: 100%; padding: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 6001; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
+        
+        /* BARRITA DE TIEMPO */
+        .story-progress-container { position: absolute; top: 10px; left: 10px; right: 10px; height: 3px; background: rgba(255,255,255,0.3); border-radius: 3px; z-index: 6002; overflow: hidden; }
+        .story-progress-fill { height: 100%; background: white; width: 0%; border-radius: 3px; }
+        
+        .story-header { position: absolute; top: 15px; left: 0; width: 100%; padding: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 6001; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
         .story-header-info { display: flex; align-items: center; gap: 10px; color: white; font-weight: 800; font-size: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         .story-close { color: white; font-size: 30px; cursor: pointer; text-shadow: 0 2px 4px rgba(0,0,0,0.8); padding: 0 10px; }
         .story-img-container { flex: 1; display: flex; align-items: center; justify-content: center; height: 100%; }
@@ -83,7 +93,7 @@
             <button class="filter-btn active" onclick="filtrar('Todo')">Todo</button>
             <button class="filter-btn" onclick="filtrar('Familia')">🏠 Familia</button>
             <button class="filter-btn" onclick="filtrar('Fiestas')">🎉 Fiestas</button>
-            <button class="filter-btn" onclick="filtrar('Historia')">⏳ Solo Historias</button>
+            <button class="filter-btn" onclick="filtrar('Viajes')">✈️ Viajes</button>
         </div>
 
         <label for="fotoInput" id="labelPost" class="btn-post">✨ SUBIR FOTO O HISTORIA</label>
@@ -92,6 +102,7 @@
             <select id="categoriaInput" class="category-select">
                 <option value="Familia">🏠 Publicación Normal (Familia)</option>
                 <option value="Fiestas">🎉 Publicación Normal (Fiestas)</option>
+                <option value="Viajes">✈️ Publicación Normal (Viajes)</option>
                 <option value="Historia">⏳ HISTORIA (Desaparece en 24h)</option>
             </select>
         </div>
@@ -104,6 +115,9 @@
 </div>
 
 <div id="story-viewer">
+    <div class="story-progress-container">
+        <div id="sv-progress" class="story-progress-fill"></div>
+    </div>
     <div class="story-header">
         <div class="story-header-info">
             <span id="sv-author">Autor</span>
@@ -117,7 +131,6 @@
 </div>
 
 <script type="module">
-    // AQUÍ ESTÁ EL ARREGLO: LLAVES DIRECTAS DE FIREBASE
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -132,6 +145,8 @@
     let todosLosPosts = [];
     let historiasActivas = [];
     let filtroActual = 'Todo';
+    let timerCierreHistoria; 
+    let historiasVistas = JSON.parse(localStorage.getItem('historias_vistas_lab')) || [];
 
     const getNombre = () => {
         let n = localStorage.getItem('user_n_lab');
@@ -236,7 +251,6 @@
         todosLosPosts = [];
         historiasActivas = [];
         
-        // RELOJ DE 24 HORAS PARA HISTORIAS
         const ahora = new Date().getTime();
         const limite24h = ahora - (24 * 60 * 60 * 1000);
 
@@ -246,11 +260,10 @@
             
             if (data.categoria === "Historia") {
                 if (fechaPost > limite24h) {
-                    historiasActivas.push(data); // Si tiene menos de 24h, es una historia activa
-                    todosLosPosts.push(data); // También la dejamos para el muro si filtran
+                    historiasActivas.push(data); 
                 }
             } else {
-                todosLosPosts.push(data); // Posts normales
+                todosLosPosts.push(data); 
             }
         });
         
@@ -258,7 +271,6 @@
         pintarMuro();
     });
 
-    // 🟢 FUNCIÓN PARA PINTAR LOS CÍRCULOS DE HISTORIAS ARRIBA
     function pintarVitrinaHistorias() {
         const contenedorDiv = document.getElementById('historias-container');
         const scrollDiv = document.getElementById('historias-scroll');
@@ -269,9 +281,12 @@
             historiasActivas.forEach((historia, index) => {
                 let fotoPortada = (historia.fotos && historia.fotos.length > 0) ? historia.fotos[0] : (historia.foto || "https://via.placeholder.com/100");
                 
+                // CHEQUEAMOS SI YA LA VIO PARA PINTARLA VERDE O GRIS
+                let estadoAro = historiasVistas.includes(historia.id) ? "seen" : "unseen";
+                
                 scrollDiv.innerHTML += `
                     <div class="story-item" onclick="abrirHistoria(${index})">
-                        <div class="story-ring">
+                        <div class="story-ring ${estadoAro}">
                             <img src="${fotoPortada}">
                         </div>
                         <div class="story-author">${historia.autor}</div>
@@ -283,21 +298,46 @@
         }
     }
 
-    // 🟢 FUNCIONES PARA ABRIR Y CERRAR EL VISOR NEGRO
+    // 🟢 FUNCIÓN PARA ABRIR Y CONTROLAR EL TIEMPO
     window.abrirHistoria = (index) => {
         const historia = historiasActivas[index];
         const foto = (historia.fotos && historia.fotos.length > 0) ? historia.fotos[0] : historia.foto;
         
+        // Registrar como VISTA y repintar aro a Gris
+        if(!historiasVistas.includes(historia.id)) {
+            historiasVistas.push(historia.id);
+            localStorage.setItem('historias_vistas_lab', JSON.stringify(historiasVistas));
+            pintarVitrinaHistorias();
+        }
+
         document.getElementById('sv-author').innerText = historia.autor;
         document.getElementById('sv-img').src = foto;
         document.getElementById('sv-text').innerText = historia.texto || "";
         
         document.getElementById('story-viewer').style.display = 'flex';
+
+        // REINICIAR Y ARRANCAR BARRITA (10 Segundos)
+        clearTimeout(timerCierreHistoria);
+        let barra = document.getElementById('sv-progress');
+        barra.style.transition = 'none';
+        barra.style.width = '0%';
+        
+        setTimeout(() => {
+            barra.style.transition = 'width 10s linear';
+            barra.style.width = '100%';
+        }, 50);
+
+        timerCierreHistoria = setTimeout(() => {
+            cerrarHistoria();
+        }, 10000);
     };
 
     window.cerrarHistoria = () => {
+        clearTimeout(timerCierreHistoria); // Frenamos el reloj
         document.getElementById('story-viewer').style.display = 'none';
         document.getElementById('sv-img').src = "";
+        document.getElementById('sv-progress').style.transition = 'none';
+        document.getElementById('sv-progress').style.width = '0%';
     };
 
     window.filtrar = (cat) => {
