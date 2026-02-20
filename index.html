@@ -28,18 +28,17 @@
         .historias-scroll::-webkit-scrollbar { display: none; }
         .story-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 65px; flex-shrink: 0; }
         
-        /* COLORES DEL ARO (VERDE: NUEVO, GRIS: VISTO) */
-        .story-ring { width: 65px; height: 65px; border-radius: 50%; padding: 3px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .story-ring.unseen { background: #25d366; } /* Verde WhatsApp */
-        .story-ring.seen { background: #cbd5e1; } /* Gris Visto */
+        /* AROS DE ESTADO */
+        .story-ring { width: 65px; height: 65px; border-radius: 50%; padding: 3px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s; }
+        .story-ring.unseen { background: #25d366; border: 2px solid #25d366; } /* Verde Nuevo */
+        .story-ring.seen { background: #64748b; border: 2px solid #64748b; opacity: 0.8; } /* Gris Visto */
         
         .story-ring img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #0f172a; object-fit: cover; }
         .story-author { font-size: 11px; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: center; font-weight: 600; }
 
-        /* VISOR DE HISTORIAS A PANTALLA COMPLETA */
+        /* VISOR PANTALLA COMPLETA */
         #story-viewer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 6000; flex-direction: column; }
         
-        /* BARRITA DE TIEMPO */
         .story-progress-container { position: absolute; top: 10px; left: 10px; right: 10px; height: 3px; background: rgba(255,255,255,0.3); border-radius: 3px; z-index: 6002; overflow: hidden; }
         .story-progress-fill { height: 100%; background: white; width: 0%; border-radius: 3px; }
         
@@ -154,17 +153,22 @@
         return n;
     };
 
+    // 🟢 ARRANQUE AUTOMÁTICO SI YA HAY CLAVE
     if(localStorage.getItem('familia_auth_lab')) {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('app-content').style.display = 'block';
         getNombre();
     }
 
+    // 🟢 ARRANQUE DIRECTO AL ESCRIBIR (SIN RECARGAR)
     document.getElementById('passInput').oninput = (e) => {
         const val = e.target.value.toLowerCase();
         if(val === CLAVE_NORMAL || val === CLAVE_ADMIN) {
             localStorage.setItem('familia_auth_lab', val);
-            location.reload();
+            // ¡MAGIA AQUÍ! Ocultamos y mostramos directamente
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-content').style.display = 'block';
+            getNombre();
         }
     };
 
@@ -281,7 +285,6 @@
             historiasActivas.forEach((historia, index) => {
                 let fotoPortada = (historia.fotos && historia.fotos.length > 0) ? historia.fotos[0] : (historia.foto || "https://via.placeholder.com/100");
                 
-                // CHEQUEAMOS SI YA LA VIO PARA PINTARLA VERDE O GRIS
                 let estadoAro = historiasVistas.includes(historia.id) ? "seen" : "unseen";
                 
                 scrollDiv.innerHTML += `
@@ -298,12 +301,10 @@
         }
     }
 
-    // 🟢 FUNCIÓN PARA ABRIR Y CONTROLAR EL TIEMPO
     window.abrirHistoria = (index) => {
         const historia = historiasActivas[index];
         const foto = (historia.fotos && historia.fotos.length > 0) ? historia.fotos[0] : historia.foto;
         
-        // Registrar como VISTA y repintar aro a Gris
         if(!historiasVistas.includes(historia.id)) {
             historiasVistas.push(historia.id);
             localStorage.setItem('historias_vistas_lab', JSON.stringify(historiasVistas));
@@ -316,7 +317,6 @@
         
         document.getElementById('story-viewer').style.display = 'flex';
 
-        // REINICIAR Y ARRANCAR BARRITA (10 Segundos)
         clearTimeout(timerCierreHistoria);
         let barra = document.getElementById('sv-progress');
         barra.style.transition = 'none';
@@ -333,7 +333,7 @@
     };
 
     window.cerrarHistoria = () => {
-        clearTimeout(timerCierreHistoria); // Frenamos el reloj
+        clearTimeout(timerCierreHistoria);
         document.getElementById('story-viewer').style.display = 'none';
         document.getElementById('sv-img').src = "";
         document.getElementById('sv-progress').style.transition = 'none';
