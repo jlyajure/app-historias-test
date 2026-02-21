@@ -68,12 +68,12 @@
         .btn-post { background: var(--accent-blue); color: white; padding: 16px; border-radius: 18px; font-weight: 700; cursor: pointer; display: block; text-align: center; margin-bottom: 10px; transition: transform 0.2s; }
         #status-msg { text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 20px; min-height: 15px; font-weight: bold; }
 
-        /* 🎨 NUEVO COLOR DE FONDO (Blanco Humo suave) Y BORDES */
-        .post { background: #f8fafc; border-radius: 28px; padding: 20px; margin-bottom: 25px; color: #0f172a; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.1); }
+        /* 🎨 NUEVO COLOR DE FONDO (Gris Plata Suave) Y BORDES */
+        .post { background: #e2e8f0; border-radius: 28px; padding: 20px; margin-bottom: 25px; color: #0f172a; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 2px solid #cbd5e1; }
         
         .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .post-author { font-weight: 800; color: var(--accent-blue); font-size: 14px; }
-        .category-badge { font-size: 10px; background: #e0f2fe; color: #0284c7; padding: 4px 8px; border-radius: 8px; font-weight: 700; margin-left: 8px; text-transform: uppercase; }
+        .post-author { font-weight: 800; color: #1d4ed8; font-size: 14px; }
+        .category-badge { font-size: 10px; background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 8px; font-weight: 800; margin-left: 8px; text-transform: uppercase; border: 1px solid #bfdbfe; }
         
         /* 🎨 LETRAS MÁS OSCURAS PARA MEJOR CONTRASTE */
         .post-date { font-size: 11px; color: #475569; font-weight: 700; } 
@@ -82,18 +82,20 @@
         
         .post-carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; margin: 10px 0; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
         .post-carousel::-webkit-scrollbar { height: 6px; }
-        .post-carousel::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
-        .post-carousel::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
-        .post-carousel img { scroll-snap-align: center; flex: 0 0 100%; width: 100%; border-radius: 20px; object-fit: cover; cursor: pointer; }
+        .post-carousel::-webkit-scrollbar-track { background: #cbd5e1; border-radius: 10px; }
+        .post-carousel::-webkit-scrollbar-thumb { background: #64748b; border-radius: 10px; }
+        .post-carousel img { scroll-snap-align: center; flex: 0 0 100%; width: 100%; border-radius: 20px; object-fit: cover; cursor: pointer; border: 1px solid #cbd5e1; }
         
         /* 🎨 LETRAS MÁS OSCURAS PARA EL SWIPE Y LOS LIKES */
-        .swipe-indicator { font-size: 11px; color: #475569; text-align: right; margin-top: -5px; margin-bottom: 10px; font-style: italic; font-weight: 600; }
-        .btn-like { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; padding: 8px 15px; border-radius: 12px; cursor: pointer; font-weight: 800; width: 100%; text-align: left; margin-bottom: 5px; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .swipe-indicator { font-size: 11px; color: #475569; text-align: right; margin-top: -5px; margin-bottom: 10px; font-style: italic; font-weight: 700; }
+        
+        /* BOTÓN DE LIKE BLANCO PARA QUE RESALTE SOBRE EL GRIS */
+        .btn-like { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; padding: 10px 15px; border-radius: 12px; cursor: pointer; font-weight: 800; width: 100%; text-align: left; margin-bottom: 5px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .btn-like.liked { background: #fff5f5; color: #ff4757; border-color: #ff4757; }
-        .likes-list { font-size: 11px; color: #475569; margin-bottom: 15px; margin-left: 5px; font-style: italic; font-weight: 600; }
+        .likes-list { font-size: 11px; color: #475569; margin-bottom: 15px; margin-left: 5px; font-style: italic; font-weight: 700; }
 
-        /* 🎨 AJUSTES DE CONTRASTE EN COMENTARIOS */
-        .comments-section { background: #ffffff; padding: 12px; border-radius: 18px; border: 1px solid #e2e8f0; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        /* CAJA DE COMENTARIOS BLANCA PARA QUE RESALTE */
+        .comments-section { background: #ffffff; padding: 12px; border-radius: 18px; border: 1px solid #cbd5e1; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .comment { font-size: 13px; margin-bottom: 8px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; color: #1e293b; }
         .comment b { color: #0f172a; font-weight: 800; }
         .comment-input-group { display: flex; gap: 8px; margin-top: 10px; }
