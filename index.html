@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title>Familia</title>
+    <title>Laboratorio Familia</title>
     <meta name="apple-mobile-web-app-title" content="Familia">
     <meta name="application-name" content="Familia">
     
@@ -12,10 +12,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0f172a">
-    
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/png" href="https://img.icons8.com/emoji/192/house-with-garden.png">
-    <link rel="apple-touch-icon" href="https://img.icons8.com/emoji/192/house-with-garden.png">
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
@@ -29,56 +25,27 @@
         .login-card { position: relative; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 40px 25px; border-radius: 35px; text-align: center; max-width: 320px; width: 90%; box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
         #passInput { width: 100%; padding: 18px; border: 2px solid rgba(255,255,255,0.2); border-radius: 20px; background: rgba(255,255,255,0.08); color: white; text-align: center; outline: none; margin-top: 20px; font-size: 16px; }
         #btnEntrar { width: 100%; padding: 16px; background: var(--wa-green); color: white; border: none; border-radius: 20px; margin-top: 15px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(37,211,102,0.3); transition: 0.2s; }
-        #btnEntrar:active { transform: scale(0.95); }
         
         #app-content { display: none; padding-bottom: 40px; }
         header { background: rgba(15, 23, 42, 0.9); padding: 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .container { max-width: 480px; margin: auto; padding: 20px 15px; }
 
-        /* 🟢 HISTORIAS */
-        #historias-container { display: none; margin-bottom: 20px; }
-        .historias-title { font-size: 13px; font-weight: 800; color: #94a3b8; margin-bottom: 10px; margin-left: 5px; }
-        .historias-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
-        .historias-scroll::-webkit-scrollbar { display: none; }
-        .story-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; width: 65px; flex-shrink: 0; }
-        .story-ring { width: 65px; height: 65px; border-radius: 50%; padding: 3px; display: flex; align-items: center; justify-content: center; margin-bottom: 5px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.3s; }
-        .story-ring.unseen { background: #25d366; border: 2px solid #25d366; } 
-        .story-ring.seen { background: #64748b; border: 2px solid #64748b; opacity: 0.8; } 
-        .story-ring img { width: 100%; height: 100%; border-radius: 50%; border: 2px solid #0f172a; object-fit: cover; }
-        .story-author { font-size: 11px; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; text-align: center; font-weight: 600; }
-
-        /* 🟢 VISOR DE HISTORIAS */
-        #story-viewer { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 6000; flex-direction: column; touch-action: none; }
-        .story-progress-container { position: absolute; top: 10px; left: 10px; right: 10px; height: 3px; background: rgba(255,255,255,0.3); border-radius: 3px; z-index: 6002; overflow: hidden; }
-        .story-progress-fill { height: 100%; background: white; width: 0%; border-radius: 3px; }
-        .story-header { position: absolute; top: 15px; left: 0; width: 100%; padding: 20px; display: flex; justify-content: space-between; align-items: center; z-index: 6001; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
-        .story-header-info { display: flex; align-items: center; gap: 10px; color: white; font-weight: 800; font-size: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-        .story-close { color: white; font-size: 30px; cursor: pointer; text-shadow: 0 2px 4px rgba(0,0,0,0.8); padding: 0 10px; }
-        .story-img-container { flex: 1; display: flex; align-items: center; justify-content: center; height: 100%; }
-        .story-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .story-text { position: absolute; bottom: 40px; width: 100%; text-align: center; color: white; font-size: 16px; font-weight: 600; text-shadow: 0 2px 8px rgba(0,0,0,1); padding: 0 20px; }
-
-        /* 🟢 MURO Y FILTROS */
         .filter-scroll { overflow-x: auto; white-space: nowrap; padding-bottom: 10px; margin-bottom: 15px; -webkit-overflow-scrolling: touch; }
         .filter-scroll::-webkit-scrollbar { display: none; }
         .filter-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 20px; margin-right: 8px; font-size: 13px; cursor: pointer; transition: 0.3s; }
         .filter-btn.active { background: var(--accent-blue); border-color: var(--accent-blue); font-weight: 800; }
 
-        .category-select { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 15px; background: rgba(255,255,255,0.9); border: none; font-size: 14px; color: #1e293b; font-weight: bold; }
+        .category-select { width: 100%; padding: 14px 20px; margin-bottom: 15px; border-radius: 18px; background-color: #f8fafc; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 16px center; background-size: 16px; border: 2px solid #cbd5e1; font-size: 14px; color: #0f172a; font-weight: 800; -webkit-appearance: none; appearance: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); outline: none; }
         .month-separator { background: rgba(59, 130, 246, 0.2); color: #93c5fd; padding: 8px 20px; border-radius: 50px; font-size: 12px; font-weight: 800; text-align: center; margin: 30px 0 15px 0; border: 1px solid rgba(59, 130, 246, 0.3); letter-spacing: 2px; text-transform: uppercase; }
         
-        .btn-post { background: var(--accent-blue); color: white; padding: 16px; border-radius: 18px; font-weight: 700; cursor: pointer; display: block; text-align: center; margin-bottom: 10px; transition: transform 0.2s; }
+        .btn-post { background: var(--accent-blue); color: white; padding: 16px; border-radius: 18px; font-weight: 700; cursor: pointer; display: block; text-align: center; margin-bottom: 10px; transition: transform 0.2s; border:none; width:100%; }
         #status-msg { text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 20px; min-height: 15px; font-weight: bold; }
 
-        #wa-notice { display: none; background: var(--wa-green); color: white; padding: 15px; border-radius: 22px; text-align: center; font-weight: 800; text-decoration: none; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(37,211,102,0.3); }
-
         .post { background: #e2e8f0; border-radius: 28px; padding: 20px; margin-bottom: 25px; color: #0f172a; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 2px solid #cbd5e1; }
-        
         .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .post-author { font-weight: 800; color: #1d4ed8; font-size: 14px; }
         .category-badge { font-size: 10px; background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 8px; font-weight: 800; margin-left: 8px; text-transform: uppercase; border: 1px solid #bfdbfe; }
         .post-date { font-size: 11px; color: #475569; font-weight: 700; } 
-        
         .btn-delete-admin { background: #ff4757; color: white; border: none; padding: 6px 10px; border-radius: 10px; cursor: pointer; margin-left: 10px; }
         
         .post-carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; margin: 10px 0; padding-bottom: 5px; -webkit-overflow-scrolling: touch; }
@@ -88,8 +55,6 @@
         .post-carousel img { scroll-snap-align: center; flex: 0 0 100%; width: 100%; border-radius: 20px; object-fit: cover; cursor: pointer; border: 1px solid #cbd5e1; }
         
         .swipe-indicator { font-size: 11px; color: #475569; text-align: right; margin-top: -5px; margin-bottom: 10px; font-style: italic; font-weight: 700; }
-        
-        /* 🔥 BOTÓN "TE GUSTA" CORREGIDO Y COMPACTO 🔥 */
         .btn-like { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: 800; display: inline-block; margin-bottom: 5px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .btn-like.liked { background: #fff5f5; color: #ff4757; border-color: #ff4757; }
         .likes-list { font-size: 11px; color: #475569; margin-bottom: 15px; margin-left: 5px; font-style: italic; font-weight: 700; }
@@ -103,86 +68,60 @@
 
         #photo-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 5000; overflow: auto; justify-content: center; align-items: center; touch-action: none; }
         #modal-img { max-width: 100%; max-height: 100%; object-fit: contain; cursor: zoom-out; transition: transform 0.2s; }
-        
         #close-modal-btn { position: fixed; top: 20px; right: 20px; z-index: 5001; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(8px); width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer; transition: 0.2s; }
-        #close-modal-btn:active { transform: scale(0.9); }
         #close-modal-btn svg { width: 22px; height: 22px; stroke: white; }
-
-        .btn-wa-familia { position: fixed; bottom: 85px; right: 20px; background: #25D366; color: white; width: 55px; height: 55px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 0 20px rgba(37,211,102,0.4); z-index: 5500; transition: 0.3s; }
-        .btn-wa-familia:hover { transform: scale(1.1); box-shadow: 0 0 30px rgba(37,211,102,0.8); }
-        .btn-wa-familia svg { width: 32px; height: 32px; fill: currentColor; }
     </style>
 </head>
 <body>
 
 <div id="login-screen">
     <div class="login-card">
-        <div style="font-size: 45px; margin-bottom: 15px;">🌅</div>
-        <h2 style="color: white; margin: 0;">Nuestros Recuerdos</h2>
+        <div style="font-size: 45px; margin-bottom: 15px;">🧪</div>
+        <h2 style="color: white; margin: 0;">Laboratorio Pruebas</h2>
         <input type="password" id="passInput" placeholder="Clave de acceso">
-        <button id="btnEntrar">ENTRAR</button>
+        <button id="btnEntrar">ENTRAR AL LAB</button>
     </div>
 </div>
 
 <div id="app-content">
     <header>
-        <h1 style="font-size: 18px; margin:0; color:white;">Familia</h1>
-        <button onclick="localStorage.removeItem('familia_auth'); location.reload();" style="background:rgba(255,255,255,0.1); color:#94a3b8; border:none; padding:10px; border-radius:10px; cursor:pointer;">Salir 🔒</button>
+        <h1 style="font-size: 18px; margin:0; color:white;">Familia (LAB)</h1>
+        <button onclick="localStorage.removeItem('familia_auth_lab'); location.reload();" style="background:rgba(255,255,255,0.1); color:#94a3b8; border:none; padding:10px; border-radius:10px; cursor:pointer;">Salir 🔒</button>
     </header>
     <div class="container">
         
-        <div id="historias-container">
-            <div class="historias-title">Estados Recientes (24h)</div>
-            <div id="historias-scroll" class="historias-scroll"></div>
-        </div>
-
         <div class="filter-scroll">
             <button class="filter-btn active" onclick="filtrar('Todo')">Todo</button>
             <button class="filter-btn" onclick="filtrar('Familia')">🏠 Familia</button>
             <button class="filter-btn" onclick="filtrar('Fiestas')">🎉 Fiestas</button>
-            <button class="filter-btn" onclick="filtrar('Celebración')">🍾 Celebración</button>
-            <button class="filter-btn" onclick="filtrar('Viajes')">✈️ Viajes</button>
-            <button class="filter-btn" onclick="filtrar('Recuerdos')">📜 Recuerdos</button>
             <button class="filter-btn" onclick="filtrar('Jodedera')">🤣 Jodedera</button>
         </div>
 
-        <a id="wa-notice" href="#" target="_blank" style="display:none;">📢 ¡AVISAR POR WHATSAPP!</a>
-
-        <label for="fotoInput" id="labelPost" class="btn-post">✨ SUBIR FOTO O HISTORIA</label>
-        
-        <div id="upload-options" style="display:none;">
+        <div id="upload-options">
             <select id="categoriaInput" class="category-select">
-                <option value="Familia">🏠 Publicación Normal (Familia)</option>
-                <option value="Fiestas">🎉 Publicación Normal (Fiestas)</option>
-                <option value="Celebración">🍾 Publicación Normal (Celebración)</option>
-                <option value="Viajes">✈️ Publicación Normal (Viajes)</option>
-                <option value="Recuerdos">📜 Publicación Normal (Recuerdos)</option>
-                <option value="Jodedera">🤣 Publicación Normal (Jodedera)</option>
-                <option value="Historia">⏳ HISTORIA (Desaparece en 24h)</option>
+                <option value="Familia">🏠 Categoria (Familia)</option>
+                <option value="Fiestas">🎉 Categoria (Fiestas)</option>
+                <option value="Jodedera">🤣 Categoria (Jodedera)</option>
             </select>
+            
+            <label for="fotoInput" id="labelPost" class="btn-post">✨ SUBIR FOTO</label>
+            <input type="file" id="fotoInput" style="display:none;" accept="image/*" multiple>
+
+            <button id="btnGrabar" class="btn-post" style="background: #ef4444;">🎙️ GRABAR NOTA DE VOZ</button>
+            
+            <div id="recording-status" style="display:none; color: #ef4444; text-align: center; font-weight: 800; margin: 15px 0;">
+                🔴 Grabando audio... 
+                <button id="btnStop" style="margin-left:10px; background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer; font-weight:bold;">Detener ⏹️</button>
+            </div>
+            
+            <audio id="audioPreview" controls style="display:none; width: 100%; margin-bottom: 10px; border-radius: 10px;"></audio>
+            
+            <button id="btnPublicarAudio" class="btn-post" style="display:none; background: var(--wa-green);">🚀 PUBLICAR ESTE AUDIO</button>
         </div>
 
         <div id="status-msg"></div>
-        <input type="file" id="fotoInput" style="display:none;" accept="image/*" multiple>
-        
         <div id="muro"></div>
     </div>
-</div>
-
-<div id="story-viewer">
-    <div class="story-progress-container">
-        <div id="sv-progress" class="story-progress-fill"></div>
-    </div>
-    <div class="story-header">
-        <div class="story-header-info">
-            <span id="sv-author">Autor</span>
-        </div>
-        <div class="story-close" onclick="cerrarHistoria()">✕</div>
-    </div>
-    <div class="story-img-container">
-        <img id="sv-img" src="">
-    </div>
-    <div id="sv-text" class="story-text"></div>
 </div>
 
 <div id="photo-modal">
@@ -195,225 +134,170 @@
     <img id="modal-img" src="">
 </div>
 
-<a href="https://wa.me/584125852879" target="_blank" class="btn-wa-familia" title="Escríbenos al WhatsApp">
-    <svg viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 19.84C10.57 19.84 9.14 19.45 7.9 18.71L7.61 18.54L4.47 19.36L5.31 16.3L5.12 16C4.33 14.78 3.91 13.36 3.91 11.91C3.91 7.43 7.56 3.79 12.05 3.79C14.22 3.79 16.27 4.64 17.8 6.18C19.34 7.71 20.19 9.76 20.19 11.92C20.19 16.4 16.54 20.04 12.05 20.04M16.52 13.79C16.27 13.67 15.06 13.07 14.83 12.99C14.6 12.91 14.43 12.87 14.27 13.11C14.1 13.36 13.64 13.92 13.5 14.09C13.36 14.27 13.21 14.29 12.96 14.17C12.72 14.04 11.92 13.78 10.97 12.94C10.23 12.28 9.72 11.45 9.58 11.2C9.43 10.96 9.56 10.82 9.69 10.7C9.8 10.59 9.94 10.42 10.06 10.28C10.18 10.13 10.23 10.03 10.3 9.87C10.39 9.7 10.34 9.56 10.28 9.44C10.22 9.32 9.72 8.1 9.52 7.6C9.32 7.12 9.12 7.18 8.97 7.18C8.83 7.18 8.66 7.18 8.5 7.18C8.34 7.18 8.08 7.24 7.85 7.5C7.63 7.76 7 8.35 7 9.55C7 10.75 7.88 11.91 8 12.08C8.13 12.25 9.73 14.71 12.18 15.76C12.76 16.01 13.22 16.16 13.58 16.27C14.16 16.45 14.69 16.41 15.11 16.35C15.58 16.28 16.52 15.78 16.72 15.22C16.92 14.66 16.92 14.18 16.85 14.09C16.78 13.99 16.63 13.93 16.38 13.8L16.52 13.79Z"/></svg>
-</a>
-
 <script type="module">
+    // ⚠️ IMPORTAMOS FIREBASE STORAGE (EL TANQUE DE AUDIOS)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const firebaseConfig = { apiKey: "AIzaSyBwBq4gLgv4DSfUidzUuC7Irmvj_4pCTtI", authDomain: "familia-yajure-app.firebaseapp.com", projectId: "familia-yajure-app", storageBucket: "familia-yajure-app.firebasestorage.app", messagingSenderId: "692035727386", appId: "1:692035727386:web:dfa3e39a481d56368a61a3" };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const storage = getStorage(app); // 🔧 MOTOR DE ALMACENAMIENTO DE AUDIO ACTIVADO
 
-    const CLAVE_NORMAL = "familia2026";
-    const CLAVE_ADMIN = "ticoadmin2026";
+    const CLAVE_NORMAL = "familia2026"; const CLAVE_ADMIN = "ticoadmin2026";
     const IMGBB_KEY = "07dd4f0a1180673510c5047ae8b5eec8"; 
 
     let todosLosPosts = [];
-    let historiasActivas = [];
     let filtroActual = 'Todo';
-    let timerCierreHistoria; 
-    let historiasVistas = JSON.parse(localStorage.getItem('historias_vistas')) || [];
 
-    const getNombre = () => {
-        let n = localStorage.getItem('user_n');
-        if(!n) { n = prompt("👤 Escribe tu nombre:"); if(n) localStorage.setItem('user_n', n); }
-        return n;
-    };
+    // VARIABLES DEL MICRÓFONO 🎙️
+    let mediaRecorder;
+    let audioChunks = [];
+    let audioBlob = null;
 
-    if(localStorage.getItem('familia_auth')) {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app-content').style.display = 'block';
-        getNombre();
-    }
+    const getNombre = () => { let n = localStorage.getItem('user_n_lab'); if(!n) { n = prompt("👤 Nombre para el Laboratorio:"); if(n) localStorage.setItem('user_n_lab', n); } return n; };
 
-    const intentarIngreso = () => {
-        const val = document.getElementById('passInput').value.trim().toLowerCase(); 
-        if(val === CLAVE_NORMAL || val === CLAVE_ADMIN) {
-            localStorage.setItem('familia_auth', val);
-            document.getElementById('login-screen').style.display = 'none';
-            document.getElementById('app-content').style.display = 'block';
-            getNombre();
-        } else {
-            alert("Clave incorrecta 🛑 (Revisa que no tengas un espacio en blanco al final)");
+    if(localStorage.getItem('familia_auth_lab')) { document.getElementById('login-screen').style.display = 'none'; document.getElementById('app-content').style.display = 'block'; getNombre(); }
+
+    document.getElementById('btnEntrar').onclick = () => { const val = document.getElementById('passInput').value.trim().toLowerCase(); if(val === CLAVE_NORMAL || val === CLAVE_ADMIN) { localStorage.setItem('familia_auth_lab', val); document.getElementById('login-screen').style.display = 'none'; document.getElementById('app-content').style.display = 'block'; getNombre(); } else { alert("Clave incorrecta"); } };
+
+    window.abrirLupa = (url) => { document.getElementById('modal-img').src = url; document.getElementById('photo-modal').style.display = 'flex'; };
+    window.cerrarLupa = () => { document.getElementById('photo-modal').style.display = 'none'; };
+
+    // ==========================================
+    // 🎙️ SISTEMA DE GRABACIÓN DE AUDIO
+    // ==========================================
+    document.getElementById('btnGrabar').onclick = async () => {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+            audioChunks = [];
+
+            mediaRecorder.addEventListener("dataavailable", event => {
+                audioChunks.push(event.data);
+            });
+
+            mediaRecorder.addEventListener("stop", () => {
+                audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                document.getElementById('audioPreview').src = audioUrl;
+                document.getElementById('audioPreview').style.display = 'block';
+                document.getElementById('recording-status').style.display = 'none';
+                document.getElementById('btnPublicarAudio').style.display = 'block';
+                document.getElementById('btnGrabar').innerText = "🔄 VOLVER A GRABAR";
+                document.getElementById('btnGrabar').style.display = 'block';
+            });
+
+            document.getElementById('recording-status').style.display = 'block';
+            document.getElementById('btnGrabar').style.display = 'none';
+            document.getElementById('btnPublicarAudio').style.display = 'none';
+            document.getElementById('audioPreview').style.display = 'none';
+
+        } catch (err) {
+            alert("⚠️ El teléfono necesita que le des permiso para usar el micrófono.");
+            console.error(err);
         }
     };
 
-    document.getElementById('btnEntrar').onclick = intentarIngreso;
-    document.getElementById('passInput').oninput = (e) => {
-        const val = e.target.value.trim().toLowerCase();
-        if(val === CLAVE_NORMAL || val === CLAVE_ADMIN) intentarIngreso();
-    };
-
-    window.abrirLupa = (url) => {
-        const modal = document.getElementById('photo-modal');
-        const img = document.getElementById('modal-img');
-        img.src = url;
-        modal.style.display = 'flex';
-    };
-
-    window.cerrarLupa = () => {
-        document.getElementById('photo-modal').style.display = 'none';
-    };
-
-    document.getElementById('labelPost').onclick = (e) => {
-        const opts = document.getElementById('upload-options');
-        if(opts.style.display === 'none') {
-            e.preventDefault();
-            opts.style.display = 'block';
-            document.getElementById('labelPost').innerHTML = "📸 AHORA SÍ, TOCA AQUÍ";
+    document.getElementById('btnStop').onclick = () => {
+        if(mediaRecorder && mediaRecorder.state === "recording") {
+            mediaRecorder.stop();
         }
     };
 
-    document.getElementById('fotoInput').onchange = async (e) => {
-        const files = e.target.files;
-        if (!files || files.length === 0) return;
-        if(files.length > 5) { alert("Máximo 5 fotos por publicación."); return; }
-
-        const nombre = getNombre();
-        if (!nombre) return;
-        
+    // 🚀 PUBLICAR EL AUDIO EN FIREBASE
+    document.getElementById('btnPublicarAudio').onclick = async () => {
+        if (!audioBlob) return;
+        const nombre = getNombre(); if (!nombre) return;
         const cat = document.getElementById('categoriaInput').value;
-        const mensaje = prompt(`✍️ Mensaje para ${cat}:`);
-        
-        const label = document.getElementById('labelPost');
+        const mensaje = prompt(`✍️ (Opcional) Escribe un texto para acompañar el audio:`);
         const status = document.getElementById('status-msg');
-        label.innerHTML = "⏳ PROCESANDO...";
+        
+        status.innerHTML = "⏳ Subiendo tu Nota de Voz al servidor...";
+        document.getElementById('btnPublicarAudio').style.display = 'none';
+        
+        try {
+            // Guardar archivo en Firebase Storage
+            const audioRef = ref(storage, 'audios/nota_voz_' + new Date().getTime() + '.webm');
+            await uploadBytes(audioRef, audioBlob);
+            const urlAudio = await getDownloadURL(audioRef);
+            
+            // Guardar la publicación en la Base de Datos
+            await addDoc(collection(db, "mensajes"), {
+                texto: mensaje || "", 
+                fotos: [], 
+                audio: urlAudio, // Guardamos la URL del audio
+                autor: nombre, 
+                categoria: cat, 
+                fecha: new Date(),
+                likesBy: [],
+                comentarios: []
+            });
+            
+            status.innerHTML = "✅ ¡Nota de voz publicada!";
+            document.getElementById('audioPreview').style.display = 'none';
+            document.getElementById('audioPreview').src = "";
+            audioBlob = null;
+            document.getElementById('btnGrabar').innerText = "🎙️ GRABAR NOTA DE VOZ";
+            
+        } catch (err) { 
+            status.innerHTML = "❌ Error. Verifica los permisos.";
+            alert("Houston, tenemos un problema: " + err.message + "\n(Seguro es el candado de seguridad de Firebase que te mencioné)");
+            document.getElementById('btnPublicarAudio').style.display = 'block';
+        }
+    };
+
+    // ==========================================
+    // 📸 SISTEMA CLÁSICO DE FOTOS (INTACTO)
+    // ==========================================
+    document.getElementById('fotoInput').onchange = async (e) => {
+        const files = e.target.files; if (!files || files.length === 0) return;
+        const nombre = getNombre(); if (!nombre) return;
+        const cat = document.getElementById('categoriaInput').value;
+        const mensaje = prompt(`✍️ Mensaje para la foto:`);
+        const status = document.getElementById('status-msg');
+        status.innerHTML = "⏳ PROCESANDO FOTOS...";
         
         try {
             let urlsSubidas = [];
             for(let i = 0; i < files.length; i++) {
-                status.innerHTML = `🎨 Comprimiendo foto ${i+1} de ${files.length}...`;
-                const compressedFile = await compressImage(files[i]);
-                status.innerHTML = `🚀 Subiendo foto ${i+1}...`;
                 const formData = new FormData();
-                formData.append("image", compressedFile);
+                formData.append("image", files[i]); // Sin comprimir para el lab rápido
                 const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
                 const imgData = await res.json();
                 if (imgData.success) urlsSubidas.push(imgData.data.url);
             }
-            
             if (urlsSubidas.length > 0) {
-                status.innerHTML = "📝 Guardando recuerdo...";
-                await addDoc(collection(db, "mensajes"), {
-                    texto: mensaje || "", 
-                    fotos: urlsSubidas, 
-                    autor: nombre, 
-                    categoria: cat, 
-                    fecha: new Date(),
-                    likesBy: [],
-                    comentarios: []
-                });
-                label.innerHTML = "✨ SUBIR FOTO O HISTORIA";
-                status.innerHTML = "✅ ¡Listo!";
-                document.getElementById('upload-options').style.display = 'none';
-                
-                if (cat !== "Historia") {
-                    document.getElementById('wa-notice').style.display = "block";
-                    document.getElementById('wa-notice').href = `https://wa.me/?text=¡Nuevo+recuerdo+en+${cat}!`;
-                }
-                
+                await addDoc(collection(db, "mensajes"), { texto: mensaje || "", fotos: urlsSubidas, audio: null, autor: nombre, categoria: cat, fecha: new Date(), likesBy: [], comentarios: [] });
+                status.innerHTML = "✅ ¡Foto subida al laboratorio!";
                 document.getElementById('fotoInput').value = ""; 
             }
-        } catch (err) { 
-            alert("Error: " + err.message);
-            label.innerHTML = "✨ SUBIR FOTO O HISTORIA";
-        }
+        } catch (err) { alert("Error: " + err.message); }
     };
 
-    async function compressImage(file) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    let w = img.width; let h = img.height;
-                    if (w > 1200) { h *= 1200 / w; w = 1200; }
-                    canvas.width = w; canvas.height = h;
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.8);
-                };
-            };
-        });
-    }
-
+    // ==========================================
+    // PINTAR EL MURO (AHORA CON AUDIOS)
+    // ==========================================
     const q = query(collection(db, "mensajes"), orderBy("fecha", "desc"));
     onSnapshot(q, (snapshot) => {
         todosLosPosts = [];
-        historiasActivas = [];
-        
-        const ahora = new Date().getTime();
-        const limite24h = ahora - (24 * 60 * 60 * 1000);
-
-        snapshot.forEach((doc) => {
-            const data = { id: doc.id, ...doc.data() };
-            let fechaPost = data.fecha ? (typeof data.fecha.toDate === 'function' ? data.fecha.toDate().getTime() : new Date(data.fecha).getTime()) : 0;
-            if (data.categoria === "Historia") { if (fechaPost > limite24h) historiasActivas.push(data); } 
-            else { todosLosPosts.push(data); }
-        });
-        
-        pintarVitrinaHistorias();
+        snapshot.forEach((doc) => { todosLosPosts.push({ id: doc.id, ...doc.data() }); });
         pintarMuro();
     });
 
-    function pintarVitrinaHistorias() {
-        const contenedorDiv = document.getElementById('historias-container');
-        const scrollDiv = document.getElementById('historias-scroll');
-        scrollDiv.innerHTML = "";
-
-        if (historiasActivas.length > 0) {
-            contenedorDiv.style.display = "block";
-            historiasActivas.forEach((historia, index) => {
-                let fotoPortada = (historia.fotos && historia.fotos.length > 0) ? historia.fotos[0] : (historia.foto || "https://via.placeholder.com/100");
-                let estadoAro = historiasVistas.includes(historia.id) ? "seen" : "unseen";
-                scrollDiv.innerHTML += `
-                    <div class="story-item" onclick="abrirHistoria(${index})">
-                        <div class="story-ring ${estadoAro}"><img src="${fotoPortada}"></div>
-                        <div class="story-author">${historia.autor}</div>
-                    </div>`;
-            });
-        } else {
-            contenedorDiv.style.display = "none";
-        }
-    }
-
-    window.abrirHistoria = (index) => {
-        const historia = historiasActivas[index];
-        const foto = (historia.fotos && historia.fotos.length > 0) ? historia.fotos[0] : historia.foto;
-        if(!historiasVistas.includes(historia.id)) { historiasVistas.push(historia.id); localStorage.setItem('historias_vistas', JSON.stringify(historiasVistas)); pintarVitrinaHistorias(); }
-        document.getElementById('sv-author').innerText = historia.autor;
-        document.getElementById('sv-img').src = foto;
-        document.getElementById('sv-text').innerText = historia.texto || "";
-        document.getElementById('story-viewer').style.display = 'flex';
-        clearTimeout(timerCierreHistoria);
-        let barra = document.getElementById('sv-progress');
-        barra.style.transition = 'none'; barra.style.width = '0%';
-        setTimeout(() => { barra.style.transition = 'width 10s linear'; barra.style.width = '100%'; }, 50);
-        timerCierreHistoria = setTimeout(() => { cerrarHistoria(); }, 10000);
-    };
-
-    window.cerrarHistoria = () => { clearTimeout(timerCierreHistoria); document.getElementById('story-viewer').style.display = 'none'; document.getElementById('sv-img').src = ""; };
-
-    window.filtrar = (cat) => {
-        filtroActual = cat;
-        document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.remove('active'); if(btn.innerText.includes(cat) || (cat === 'Todo' && btn.innerText === 'Todo')) btn.classList.add('active'); });
-        pintarMuro();
-    };
+    window.filtrar = (cat) => { filtroActual = cat; document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.remove('active'); if(btn.innerText.includes(cat) || (cat === 'Todo' && btn.innerText === 'Todo')) btn.classList.add('active'); }); pintarMuro(); };
 
     function pintarMuro() {
         const muro = document.getElementById('muro');
         muro.innerHTML = "";
-        const esAdmin = localStorage.getItem('familia_auth') === "ticoadmin2026";
-        const miNombre = localStorage.getItem('user_n'); 
+        const esAdmin = localStorage.getItem('familia_auth_lab') === "ticoadmin2026";
+        const miNombre = localStorage.getItem('user_n_lab'); 
         let ultimoMes = "";
         const postsAmostrar = todosLosPosts.filter(p => filtroActual === 'Todo' || p.categoria === filtroActual);
 
-        if(postsAmostrar.length === 0) { muro.innerHTML = `<div style="text-align:center; padding:30px; color:#94a3b8;">No hay nada que mostrar aquí... 📸</div>`; return; }
+        if(postsAmostrar.length === 0) { muro.innerHTML = `<div style="text-align:center; padding:30px; color:#94a3b8;">No hay publicaciones en el laboratorio...</div>`; return; }
 
         postsAmostrar.forEach((data) => {
             const fechaObj = data.fecha ? (typeof data.fecha.toDate === 'function' ? data.fecha.toDate() : new Date(data.fecha)) : new Date();
@@ -421,20 +305,18 @@
             const fechaCorta = fechaObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
             const catLabel = data.categoria || "Familia"; 
             const listaLikes = data.likesBy || [];
-            const nombresLikes = listaLikes.length > 0 ? `Le gusta a: <b>${listaLikes.join(", ")}</b>` : "";
             const yaDiLike = listaLikes.includes(miNombre); 
-            const claseLike = yaDiLike ? "btn-like liked" : "btn-like"; 
-            const totalVisual = listaLikes.length + (data.likes || 0);
+            const totalVisual = listaLikes.length;
             const textoLike = yaDiLike ? `❤️ Te gusta (${totalVisual})` : `🤍 Me gusta (${totalVisual})`;
 
             if (mesActual !== ultimoMes) { muro.innerHTML += `<div class="month-separator">${mesActual}</div>`; ultimoMes = mesActual; }
 
             let imagenesArray = data.fotos || []; 
-            if(imagenesArray.length === 0 && data.foto) imagenesArray = [data.foto]; 
-            let carouselHtml = `<div class="post-carousel">`;
-            imagenesArray.forEach(url => { carouselHtml += `<img src="${url}" onclick="window.abrirLupa('${url}')">`; });
-            carouselHtml += `</div>`;
-            let swipeIndicator = imagenesArray.length > 1 ? `<div class="swipe-indicator">👉 Desliza para ver más (${imagenesArray.length} fotos)</div>` : "";
+            let carouselHtml = imagenesArray.length > 0 ? `<div class="post-carousel">` + imagenesArray.map(url => `<img src="${url}" onclick="window.abrirLupa('${url}')">`).join('') + `</div>` : "";
+            
+            // 🎙️ AQUÍ NACE EL REPRODUCTOR DE AUDIO SI LA PUBLICACIÓN TIENE UNO
+            let audioHtml = data.audio ? `<audio controls src="${data.audio}" style="width:100%; margin-top:10px; margin-bottom: 10px; border-radius: 10px;"></audio>` : "";
+
             let comentariosHtml = data.comentarios ? data.comentarios.map(c => `<div class="comment"><b>${c.autor}:</b> ${c.texto}</div>`).join('') : "";
 
             muro.innerHTML += `
@@ -447,10 +329,9 @@
                         </div>
                     </div>
                     <p style="font-weight: 600;">${data.texto}</p>
-                    ${carouselHtml}
-                    ${swipeIndicator}
-                    <button class="${claseLike}" onclick="darLike('${data.id}')">${textoLike}</button>
-                    <div class="likes-list">${nombresLikes}</div>
+                    
+                    ${audioHtml} ${carouselHtml} <button class="btn-like ${yaDiLike ? 'liked' : ''}" onclick="darLike('${data.id}')">${textoLike}</button>
+                    <div class="likes-list">${listaLikes.length > 0 ? `Le gusta a: <b>${listaLikes.join(", ")}</b>` : ""}</div>
                     <div class="comments-section">${comentariosHtml}
                         <div class="comment-input-group">
                             <input type="text" id="input-${data.id}" class="comment-input" placeholder="Opinar...">
@@ -461,32 +342,9 @@
         });
     }
 
-    window.darLike = async (id) => {
-        const nombre = getNombre(); if(!nombre) return;
-        const docRef = doc(db, "mensajes", id); const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) { const data = docSnap.data(); const lista = data.likesBy || [];
-            if (lista.includes(nombre)) { await updateDoc(docRef, { likesBy: arrayRemove(nombre) }); } 
-            else { await updateDoc(docRef, { likesBy: arrayUnion(nombre) }); }
-        }
-    };
-
-    window.enviarComentario = async (id) => {
-        const input = document.getElementById(`input-${id}`); const nombre = getNombre();
-        if (!input.value || !nombre) return;
-        await updateDoc(doc(db, "mensajes", id), { comentarios: arrayUnion({ autor: nombre, texto: input.value }) }); input.value = "";
-    };
-
+    window.darLike = async (id) => { const nombre = getNombre(); if(!nombre) return; const docRef = doc(db, "mensajes", id); const docSnap = await getDoc(docRef); if (docSnap.exists()) { const data = docSnap.data(); const lista = data.likesBy || []; if (lista.includes(nombre)) { await updateDoc(docRef, { likesBy: arrayRemove(nombre) }); } else { await updateDoc(docRef, { likesBy: arrayUnion(nombre) }); } } };
+    window.enviarComentario = async (id) => { const input = document.getElementById(`input-${id}`); const nombre = getNombre(); if (!input.value || !nombre) return; await updateDoc(doc(db, "mensajes", id), { comentarios: arrayUnion({ autor: nombre, texto: input.value }) }); input.value = ""; };
     window.borrarPost = async (id) => { if(confirm("¿Borrar este recuerdo?")) await deleteDoc(doc(db, "mensajes", id)); };
-
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            navigator.serviceWorker.register('sw.js').then(function(registration) {
-                console.log('Vigilante contratado con éxito');
-            }, function(err) {
-                console.log('Falló el contrato del vigilante:', err);
-            });
-        });
-    }
 </script>
 
 </body>
