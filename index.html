@@ -35,11 +35,16 @@
         .filter-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 20px; margin-right: 8px; font-size: 13px; cursor: pointer; transition: 0.3s; }
         .filter-btn.active { background: var(--accent-blue); border-color: var(--accent-blue); font-weight: 800; }
 
-        .category-select { width: 100%; padding: 14px 20px; margin-bottom: 15px; border-radius: 18px; background-color: #f8fafc; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 16px center; background-size: 16px; border: 2px solid #cbd5e1; font-size: 14px; color: #0f172a; font-weight: 800; -webkit-appearance: none; appearance: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); outline: none; }
+        .category-select { width: 100%; padding: 14px 20px; margin-bottom: 10px; border-radius: 18px; background-color: #f8fafc; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 16px center; background-size: 16px; border: 2px solid #cbd5e1; font-size: 14px; color: #0f172a; font-weight: 800; -webkit-appearance: none; appearance: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); outline: none; }
         .month-separator { background: rgba(59, 130, 246, 0.2); color: #93c5fd; padding: 8px 20px; border-radius: 50px; font-size: 12px; font-weight: 800; text-align: center; margin: 30px 0 15px 0; border: 1px solid rgba(59, 130, 246, 0.3); letter-spacing: 2px; text-transform: uppercase; }
         
-        .btn-post { background: var(--accent-blue); color: white; padding: 16px; border-radius: 18px; font-weight: 700; cursor: pointer; display: block; text-align: center; margin-bottom: 10px; transition: transform 0.2s; border:none; width:100%; }
-        #status-msg { text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 20px; min-height: 15px; font-weight: bold; }
+        .btn-post { color: white; padding: 16px; border-radius: 18px; font-weight: 700; cursor: pointer; display: block; text-align: center; margin-bottom: 10px; transition: transform 0.2s; border:none; width:100%; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .btn-post:active { transform: scale(0.95); }
+        
+        /* 🔥 NUEVA CAJA DE CREACIÓN UNIFICADA 🔥 */
+        #create-post-box { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 25px; }
+
+        #status-msg { text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 15px; min-height: 15px; font-weight: bold; }
 
         .post { background: #e2e8f0; border-radius: 28px; padding: 20px; margin-bottom: 25px; color: #0f172a; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 2px solid #cbd5e1; }
         .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -97,29 +102,33 @@
             <button class="filter-btn" onclick="filtrar('Jodedera')">🤣 Jodedera</button>
         </div>
 
-        <div id="upload-options">
+        <div id="create-post-box">
+            <h3 style="margin-top:0; font-size:14px; color:#e2e8f0; text-align:center;">NUEVA PUBLICACIÓN</h3>
+            
             <select id="categoriaInput" class="category-select">
                 <option value="Familia">🏠 Categoria (Familia)</option>
                 <option value="Fiestas">🎉 Categoria (Fiestas)</option>
                 <option value="Jodedera">🤣 Categoria (Jodedera)</option>
             </select>
             
-            <label for="fotoInput" id="labelPost" class="btn-post">✨ SUBIR FOTO</label>
-            <input type="file" id="fotoInput" style="display:none;" accept="image/*" multiple>
+            <div style="display:flex; gap:10px;">
+                <label for="fotoInput" id="labelFoto" class="btn-post" style="background:#64748b; font-size:13px; margin-bottom:0; flex:1;">📸 FOTOS</label>
+                <input type="file" id="fotoInput" style="display:none;" accept="image/*" multiple>
 
-            <button id="btnGrabar" class="btn-post" style="background: #ef4444;">🎙️ GRABAR NOTA DE VOZ (Máx 30s)</button>
+                <button id="btnGrabar" class="btn-post" style="background:#ef4444; font-size:13px; margin-bottom:0; flex:1;">🎙️ AUDIO</button>
+            </div>
             
             <div id="recording-status" style="display:none; color: #ef4444; text-align: center; font-weight: 800; margin: 15px 0;">
                 🔴 Grabando... (<span id="relojAudio">0</span>s) 
-                <button id="btnStop" style="margin-left:10px; background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer; font-weight:bold;">Detener ⏹️</button>
+                <button id="btnStop" style="margin-left:10px; background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer; font-weight:bold;">Parar ⏹️</button>
             </div>
             
-            <audio id="audioPreview" controls style="display:none; width: 100%; margin-bottom: 10px; border-radius: 10px;"></audio>
-            
-            <button id="btnPublicarAudio" class="btn-post" style="display:none; background: var(--wa-green);">🚀 PUBLICAR ESTE AUDIO</button>
+            <audio id="audioPreview" controls style="display:none; width: 100%; margin-top: 15px; border-radius: 10px;"></audio>
+
+            <button id="btnPublicarTodo" class="btn-post" style="background: var(--wa-green); margin-top: 15px; font-size:16px;">🚀 PUBLICAR</button>
+            <div id="status-msg" style="margin-top:10px; margin-bottom:0;"></div>
         </div>
 
-        <div id="status-msg"></div>
         <div id="muro"></div>
     </div>
 </div>
@@ -135,7 +144,6 @@
 </div>
 
 <script type="module">
-    // ⚠️ YA NO IMPORTAMOS FIREBASE STORAGE, SOLO LA BASE DE DATOS NORMAL
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -149,7 +157,8 @@
     let todosLosPosts = [];
     let filtroActual = 'Todo';
 
-    // VARIABLES DEL MICRÓFONO 🎙️
+    // VARIABLES GLOBALES PARA LA PUBLICACIÓN
+    let archivosSeleccionados = [];
     let mediaRecorder;
     let audioChunks = [];
     let audioBlob = null;
@@ -165,9 +174,16 @@
     window.abrirLupa = (url) => { document.getElementById('modal-img').src = url; document.getElementById('photo-modal').style.display = 'flex'; };
     window.cerrarLupa = () => { document.getElementById('photo-modal').style.display = 'none'; };
 
-    // ==========================================
-    // 🎙️ SISTEMA DE GRABACIÓN (TRUCO BASE64)
-    // ==========================================
+    // 📸 SELECCIONAR FOTOS
+    document.getElementById('fotoInput').onchange = (e) => {
+        archivosSeleccionados = e.target.files;
+        if(archivosSeleccionados.length > 0) {
+            document.getElementById('labelFoto').innerHTML = `✅ ${archivosSeleccionados.length} FOTO(S)`;
+            document.getElementById('labelFoto').style.background = "#25d366";
+        }
+    };
+
+    // 🎙️ GRABAR AUDIO
     document.getElementById('btnGrabar').onclick = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -175,124 +191,111 @@
             mediaRecorder.start();
             audioChunks = [];
             
-            let segundos = 0;
-            document.getElementById('relojAudio').innerText = "0";
-            secInterval = setInterval(() => {
-                segundos++;
-                document.getElementById('relojAudio').innerText = segundos;
-            }, 1000);
+            let segundos = 0; document.getElementById('relojAudio').innerText = "0";
+            secInterval = setInterval(() => { segundos++; document.getElementById('relojAudio').innerText = segundos; }, 1000);
 
-            // Cortacorriente automático a los 30 segs
-            recordTimer = setTimeout(() => {
-                if(mediaRecorder.state === "recording") mediaRecorder.stop();
-            }, 30000);
+            recordTimer = setTimeout(() => { if(mediaRecorder.state === "recording") mediaRecorder.stop(); }, 30000);
 
-            mediaRecorder.addEventListener("dataavailable", event => {
-                audioChunks.push(event.data);
-            });
+            mediaRecorder.addEventListener("dataavailable", event => { audioChunks.push(event.data); });
 
             mediaRecorder.addEventListener("stop", () => {
-                clearTimeout(recordTimer);
-                clearInterval(secInterval);
+                clearTimeout(recordTimer); clearInterval(secInterval);
                 audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                 const audioUrl = URL.createObjectURL(audioBlob);
                 document.getElementById('audioPreview').src = audioUrl;
                 document.getElementById('audioPreview').style.display = 'block';
                 document.getElementById('recording-status').style.display = 'none';
-                document.getElementById('btnPublicarAudio').style.display = 'block';
-                document.getElementById('btnGrabar').innerText = "🔄 VOLVER A GRABAR";
+                document.getElementById('btnGrabar').innerText = "✅ AUDIO LISTO";
+                document.getElementById('btnGrabar').style.background = "#25d366";
                 document.getElementById('btnGrabar').style.display = 'block';
             });
 
             document.getElementById('recording-status').style.display = 'block';
             document.getElementById('btnGrabar').style.display = 'none';
-            document.getElementById('btnPublicarAudio').style.display = 'none';
             document.getElementById('audioPreview').style.display = 'none';
 
-        } catch (err) {
-            alert("⚠️ El teléfono necesita que le des permiso para usar el micrófono.");
-        }
+        } catch (err) { alert("⚠️ Dale permiso al micrófono."); }
     };
 
-    document.getElementById('btnStop').onclick = () => {
-        if(mediaRecorder && mediaRecorder.state === "recording") {
-            mediaRecorder.stop();
-        }
-    };
+    document.getElementById('btnStop').onclick = () => { if(mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop(); };
 
-    // 🚀 PUBLICAR EL AUDIO CODIFICADO COMO TEXTO DIRECTO EN FIRESTORE
-    document.getElementById('btnPublicarAudio').onclick = async () => {
-        if (!audioBlob) return;
+    // 🚀 PUBLICAR TODO JUNTO (FOTO + AUDIO + TEXTO)
+    document.getElementById('btnPublicarTodo').onclick = async () => {
         const nombre = getNombre(); if (!nombre) return;
+        
+        if(archivosSeleccionados.length === 0 && !audioBlob) {
+            alert("⚠️ Agrega al menos una foto o graba un audio para publicar.");
+            return;
+        }
+
         const cat = document.getElementById('categoriaInput').value;
-        const mensaje = prompt(`✍️ (Opcional) Escribe un texto para acompañar el audio:`);
+        const mensaje = prompt(`✍️ Escribe un mensaje (Opcional):`);
         const status = document.getElementById('status-msg');
         
-        status.innerHTML = "⏳ Empaquetando tu Nota de Voz...";
-        document.getElementById('btnPublicarAudio').style.display = 'none';
+        status.innerHTML = "⏳ Acelerando el motor... no cierres la App.";
+        document.getElementById('btnPublicarTodo').style.display = 'none';
         
         try {
-            // TRUCO MECÁNICO: Convertimos el audio a texto (Base64) para no pagar peaje en Firebase Storage
-            const reader = new FileReader();
-            reader.readAsDataURL(audioBlob);
-            reader.onloadend = async () => {
-                const base64Audio = reader.result;
-                
-                status.innerHTML = "📝 Guardando en el muro...";
-                await addDoc(collection(db, "mensajes"), {
-                    texto: mensaje || "", 
-                    fotos: [], 
-                    audio: base64Audio, // Guardamos el código de texto gigantesco
-                    autor: nombre, 
-                    categoria: cat, 
-                    fecha: new Date(),
-                    likesBy: [],
-                    comentarios: []
-                });
-                
-                status.innerHTML = "✅ ¡Nota de voz publicada sin tocar Storage!";
-                document.getElementById('audioPreview').style.display = 'none';
-                document.getElementById('audioPreview').src = "";
-                audioBlob = null;
-                document.getElementById('btnGrabar').innerText = "🎙️ GRABAR NOTA DE VOZ (Máx 30s)";
-            };
-        } catch (err) { 
-            status.innerHTML = "❌ Error al guardar.";
-            alert("Error: " + err.message);
-            document.getElementById('btnPublicarAudio').style.display = 'block';
-        }
-    };
-
-    // ==========================================
-    // 📸 SISTEMA CLÁSICO DE FOTOS (INTACTO)
-    // ==========================================
-    document.getElementById('fotoInput').onchange = async (e) => {
-        const files = e.target.files; if (!files || files.length === 0) return;
-        const nombre = getNombre(); if (!nombre) return;
-        const cat = document.getElementById('categoriaInput').value;
-        const mensaje = prompt(`✍️ Mensaje para la foto:`);
-        const status = document.getElementById('status-msg');
-        status.innerHTML = "⏳ PROCESANDO FOTOS...";
-        
-        try {
+            // 1. Subir las fotos si hay alguna
             let urlsSubidas = [];
-            for(let i = 0; i < files.length; i++) {
-                const formData = new FormData();
-                formData.append("image", files[i]); 
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
-                const imgData = await res.json();
-                if (imgData.success) urlsSubidas.push(imgData.data.url);
+            if(archivosSeleccionados.length > 0) {
+                status.innerHTML = "🎨 Subiendo fotos...";
+                for(let i = 0; i < archivosSeleccionados.length; i++) {
+                    const formData = new FormData();
+                    formData.append("image", archivosSeleccionados[i]); 
+                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
+                    const imgData = await res.json();
+                    if (imgData.success) urlsSubidas.push(imgData.data.url);
+                }
             }
-            if (urlsSubidas.length > 0) {
-                await addDoc(collection(db, "mensajes"), { texto: mensaje || "", fotos: urlsSubidas, audio: null, autor: nombre, categoria: cat, fecha: new Date(), likesBy: [], comentarios: [] });
-                status.innerHTML = "✅ ¡Foto subida al laboratorio!";
-                document.getElementById('fotoInput').value = ""; 
+
+            // 2. Comprimir audio si hay alguno
+            let base64Audio = null;
+            if(audioBlob) {
+                status.innerHTML = "🎙️ Empaquetando audio...";
+                base64Audio = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(audioBlob);
+                    reader.onloadend = () => resolve(reader.result);
+                });
             }
-        } catch (err) { alert("Error: " + err.message); }
+                
+            // 3. Guardar todo en la Base de Datos
+            status.innerHTML = "📝 Guardando en el muro...";
+            await addDoc(collection(db, "mensajes"), {
+                texto: mensaje || "", 
+                fotos: urlsSubidas, 
+                audio: base64Audio, 
+                autor: nombre, 
+                categoria: cat, 
+                fecha: new Date(),
+                likesBy: [],
+                comentarios: []
+            });
+            
+            status.innerHTML = "✅ ¡Publicación exitosa!";
+            
+            // 4. Resetear los botones a cero
+            archivosSeleccionados = [];
+            audioBlob = null;
+            document.getElementById('fotoInput').value = ""; 
+            document.getElementById('labelFoto').innerHTML = "📸 FOTOS";
+            document.getElementById('labelFoto').style.background = "#64748b";
+            document.getElementById('btnGrabar').innerText = "🎙️ AUDIO";
+            document.getElementById('btnGrabar').style.background = "#ef4444";
+            document.getElementById('audioPreview').style.display = 'none';
+            document.getElementById('audioPreview').src = "";
+            document.getElementById('btnPublicarTodo').style.display = 'block';
+
+        } catch (err) { 
+            status.innerHTML = "❌ Error al subir.";
+            alert("Error: " + err.message);
+            document.getElementById('btnPublicarTodo').style.display = 'block';
+        }
     };
 
     // ==========================================
-    // PINTAR EL MURO (AHORA CON AUDIOS DE TEXTO)
+    // PINTAR EL MURO
     // ==========================================
     const q = query(collection(db, "mensajes"), orderBy("fecha", "desc"));
     onSnapshot(q, (snapshot) => {
@@ -328,7 +331,6 @@
             let imagenesArray = data.fotos || []; 
             let carouselHtml = imagenesArray.length > 0 ? `<div class="post-carousel">` + imagenesArray.map(url => `<img src="${url}" onclick="window.abrirLupa('${url}')">`).join('') + `</div>` : "";
             
-            // 📻 REPRODUCTOR DE AUDIO (Lee el código de texto gigante y lo vuelve sonido mágico)
             let audioHtml = data.audio ? `<audio controls src="${data.audio}" style="width:100%; margin-top:10px; margin-bottom: 10px; border-radius: 10px;"></audio>` : "";
 
             let comentariosHtml = data.comentarios ? data.comentarios.map(c => `<div class="comment"><b>${c.autor}:</b> ${c.texto}</div>`).join('') : "";
