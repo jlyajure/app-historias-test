@@ -107,10 +107,10 @@
             <label for="fotoInput" id="labelPost" class="btn-post">✨ SUBIR FOTO</label>
             <input type="file" id="fotoInput" style="display:none;" accept="image/*" multiple>
 
-            <button id="btnGrabar" class="btn-post" style="background: #ef4444;">🎙️ GRABAR NOTA DE VOZ</button>
+            <button id="btnGrabar" class="btn-post" style="background: #ef4444;">🎙️ GRABAR NOTA DE VOZ (Máx 30s)</button>
             
             <div id="recording-status" style="display:none; color: #ef4444; text-align: center; font-weight: 800; margin: 15px 0;">
-                🔴 Grabando audio... 
+                🔴 Grabando... (<span id="relojAudio">0</span>s) 
                 <button id="btnStop" style="margin-left:10px; background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer; font-weight:bold;">Detener ⏹️</button>
             </div>
             
@@ -135,15 +135,13 @@
 </div>
 
 <script type="module">
-    // ⚠️ IMPORTAMOS FIREBASE STORAGE (EL TANQUE DE AUDIOS)
+    // ⚠️ YA NO IMPORTAMOS FIREBASE STORAGE, SOLO LA BASE DE DATOS NORMAL
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const firebaseConfig = { apiKey: "AIzaSyBwBq4gLgv4DSfUidzUuC7Irmvj_4pCTtI", authDomain: "familia-yajure-app.firebaseapp.com", projectId: "familia-yajure-app", storageBucket: "familia-yajure-app.firebasestorage.app", messagingSenderId: "692035727386", appId: "1:692035727386:web:dfa3e39a481d56368a61a3" };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const storage = getStorage(app); // 🔧 MOTOR DE ALMACENAMIENTO DE AUDIO ACTIVADO
 
     const CLAVE_NORMAL = "familia2026"; const CLAVE_ADMIN = "ticoadmin2026";
     const IMGBB_KEY = "07dd4f0a1180673510c5047ae8b5eec8"; 
@@ -155,6 +153,8 @@
     let mediaRecorder;
     let audioChunks = [];
     let audioBlob = null;
+    let recordTimer;
+    let secInterval;
 
     const getNombre = () => { let n = localStorage.getItem('user_n_lab'); if(!n) { n = prompt("👤 Nombre para el Laboratorio:"); if(n) localStorage.setItem('user_n_lab', n); } return n; };
 
@@ -166,7 +166,7 @@
     window.cerrarLupa = () => { document.getElementById('photo-modal').style.display = 'none'; };
 
     // ==========================================
-    // 🎙️ SISTEMA DE GRABACIÓN DE AUDIO
+    // 🎙️ SISTEMA DE GRABACIÓN (TRUCO BASE64)
     // ==========================================
     document.getElementById('btnGrabar').onclick = async () => {
         try {
@@ -174,12 +174,26 @@
             mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.start();
             audioChunks = [];
+            
+            let segundos = 0;
+            document.getElementById('relojAudio').innerText = "0";
+            secInterval = setInterval(() => {
+                segundos++;
+                document.getElementById('relojAudio').innerText = segundos;
+            }, 1000);
+
+            // Cortacorriente automático a los 30 segs
+            recordTimer = setTimeout(() => {
+                if(mediaRecorder.state === "recording") mediaRecorder.stop();
+            }, 30000);
 
             mediaRecorder.addEventListener("dataavailable", event => {
                 audioChunks.push(event.data);
             });
 
             mediaRecorder.addEventListener("stop", () => {
+                clearTimeout(recordTimer);
+                clearInterval(secInterval);
                 audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                 const audioUrl = URL.createObjectURL(audioBlob);
                 document.getElementById('audioPreview').src = audioUrl;
@@ -197,7 +211,6 @@
 
         } catch (err) {
             alert("⚠️ El teléfono necesita que le des permiso para usar el micrófono.");
-            console.error(err);
         }
     };
 
@@ -207,7 +220,7 @@
         }
     };
 
-    // 🚀 PUBLICAR EL AUDIO EN FIREBASE
+    // 🚀 PUBLICAR EL AUDIO CODIFICADO COMO TEXTO DIRECTO EN FIRESTORE
     document.getElementById('btnPublicarAudio').onclick = async () => {
         if (!audioBlob) return;
         const nombre = getNombre(); if (!nombre) return;
@@ -215,36 +228,37 @@
         const mensaje = prompt(`✍️ (Opcional) Escribe un texto para acompañar el audio:`);
         const status = document.getElementById('status-msg');
         
-        status.innerHTML = "⏳ Subiendo tu Nota de Voz al servidor...";
+        status.innerHTML = "⏳ Empaquetando tu Nota de Voz...";
         document.getElementById('btnPublicarAudio').style.display = 'none';
         
         try {
-            // Guardar archivo en Firebase Storage
-            const audioRef = ref(storage, 'audios/nota_voz_' + new Date().getTime() + '.webm');
-            await uploadBytes(audioRef, audioBlob);
-            const urlAudio = await getDownloadURL(audioRef);
-            
-            // Guardar la publicación en la Base de Datos
-            await addDoc(collection(db, "mensajes"), {
-                texto: mensaje || "", 
-                fotos: [], 
-                audio: urlAudio, // Guardamos la URL del audio
-                autor: nombre, 
-                categoria: cat, 
-                fecha: new Date(),
-                likesBy: [],
-                comentarios: []
-            });
-            
-            status.innerHTML = "✅ ¡Nota de voz publicada!";
-            document.getElementById('audioPreview').style.display = 'none';
-            document.getElementById('audioPreview').src = "";
-            audioBlob = null;
-            document.getElementById('btnGrabar').innerText = "🎙️ GRABAR NOTA DE VOZ";
-            
+            // TRUCO MECÁNICO: Convertimos el audio a texto (Base64) para no pagar peaje en Firebase Storage
+            const reader = new FileReader();
+            reader.readAsDataURL(audioBlob);
+            reader.onloadend = async () => {
+                const base64Audio = reader.result;
+                
+                status.innerHTML = "📝 Guardando en el muro...";
+                await addDoc(collection(db, "mensajes"), {
+                    texto: mensaje || "", 
+                    fotos: [], 
+                    audio: base64Audio, // Guardamos el código de texto gigantesco
+                    autor: nombre, 
+                    categoria: cat, 
+                    fecha: new Date(),
+                    likesBy: [],
+                    comentarios: []
+                });
+                
+                status.innerHTML = "✅ ¡Nota de voz publicada sin tocar Storage!";
+                document.getElementById('audioPreview').style.display = 'none';
+                document.getElementById('audioPreview').src = "";
+                audioBlob = null;
+                document.getElementById('btnGrabar').innerText = "🎙️ GRABAR NOTA DE VOZ (Máx 30s)";
+            };
         } catch (err) { 
-            status.innerHTML = "❌ Error. Verifica los permisos.";
-            alert("Houston, tenemos un problema: " + err.message + "\n(Seguro es el candado de seguridad de Firebase que te mencioné)");
+            status.innerHTML = "❌ Error al guardar.";
+            alert("Error: " + err.message);
             document.getElementById('btnPublicarAudio').style.display = 'block';
         }
     };
@@ -264,7 +278,7 @@
             let urlsSubidas = [];
             for(let i = 0; i < files.length; i++) {
                 const formData = new FormData();
-                formData.append("image", files[i]); // Sin comprimir para el lab rápido
+                formData.append("image", files[i]); 
                 const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
                 const imgData = await res.json();
                 if (imgData.success) urlsSubidas.push(imgData.data.url);
@@ -278,7 +292,7 @@
     };
 
     // ==========================================
-    // PINTAR EL MURO (AHORA CON AUDIOS)
+    // PINTAR EL MURO (AHORA CON AUDIOS DE TEXTO)
     // ==========================================
     const q = query(collection(db, "mensajes"), orderBy("fecha", "desc"));
     onSnapshot(q, (snapshot) => {
@@ -314,7 +328,7 @@
             let imagenesArray = data.fotos || []; 
             let carouselHtml = imagenesArray.length > 0 ? `<div class="post-carousel">` + imagenesArray.map(url => `<img src="${url}" onclick="window.abrirLupa('${url}')">`).join('') + `</div>` : "";
             
-            // 🎙️ AQUÍ NACE EL REPRODUCTOR DE AUDIO SI LA PUBLICACIÓN TIENE UNO
+            // 📻 REPRODUCTOR DE AUDIO (Lee el código de texto gigante y lo vuelve sonido mágico)
             let audioHtml = data.audio ? `<audio controls src="${data.audio}" style="width:100%; margin-top:10px; margin-bottom: 10px; border-radius: 10px;"></audio>` : "";
 
             let comentariosHtml = data.comentarios ? data.comentarios.map(c => `<div class="comment"><b>${c.autor}:</b> ${c.texto}</div>`).join('') : "";
@@ -330,7 +344,10 @@
                     </div>
                     <p style="font-weight: 600;">${data.texto}</p>
                     
-                    ${audioHtml} ${carouselHtml} <button class="btn-like ${yaDiLike ? 'liked' : ''}" onclick="darLike('${data.id}')">${textoLike}</button>
+                    ${audioHtml} 
+                    ${carouselHtml} 
+
+                    <button class="btn-like ${yaDiLike ? 'liked' : ''}" onclick="darLike('${data.id}')">${textoLike}</button>
                     <div class="likes-list">${listaLikes.length > 0 ? `Le gusta a: <b>${listaLikes.join(", ")}</b>` : ""}</div>
                     <div class="comments-section">${comentariosHtml}
                         <div class="comment-input-group">
