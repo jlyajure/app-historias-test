@@ -9,8 +9,32 @@
     
     <style>
         * { box-sizing: border-box; }
-        :root { --accent-blue: #3b82f6; --dark-bg: linear-gradient(180deg, #0f172a 0%, #1e293b 100%); --wa-green: #25d366; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; min-height: 100vh; background: var(--dark-bg); background-attachment: fixed; color: #f8fafc; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        
+        /* 🎨 VARIABLES DE COLORES (SISTEMA DÍA/NOCHE) */
+        :root { 
+            --accent-blue: #3b82f6; 
+            --wa-green: #25d366; 
+            
+            /* Colores MODO NOCHE (Por defecto) */
+            --bg-body: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            --text-main: #f8fafc;
+            --card-bg: #e2e8f0;
+            --card-text: #0f172a;
+            --input-bg: rgba(255,255,255,0.1);
+            --header-bg: rgba(15, 23, 42, 0.9);
+        }
+
+        /* Colores MODO DÍA (Se activan con la clase .light-mode) */
+        body.light-mode {
+            --bg-body: linear-gradient(180deg, #f1f5f9 0%, #cbd5e1 100%);
+            --text-main: #1e293b;
+            --card-bg: #ffffff;
+            --card-text: #0f172a;
+            --input-bg: rgba(0,0,0,0.05);
+            --header-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; min-height: 100vh; background: var(--bg-body); background-attachment: fixed; color: var(--text-main); overflow-x: hidden; -webkit-tap-highlight-color: transparent; transition: background 0.5s; }
         
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&q=80&w=2070') no-repeat center center/cover; display: flex; align-items: flex-start; justify-content: center; z-index: 1000; padding-top: 100px; }
         #login-screen::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); }
@@ -19,19 +43,23 @@
         #btnEntrar { width: 100%; padding: 16px; background: var(--wa-green); color: white; border: none; border-radius: 20px; margin-top: 15px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(37,211,102,0.3); transition: 0.2s; }
         
         #app-content { display: none; padding-bottom: 40px; }
-        header { background: rgba(15, 23, 42, 0.9); padding: 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        
+        header { background: var(--header-bg); padding: 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); transition: background 0.3s; }
+        
+        /* BOTÓN DE MODO NOCHE/DÍA */
+        #theme-toggle { background: none; border: 1px solid rgba(255,255,255,0.3); color: var(--text-main); font-size: 20px; padding: 5px 10px; border-radius: 50%; cursor: pointer; margin-right: 10px; }
+
         .container { max-width: 480px; margin: auto; padding: 20px 15px; }
 
-        /* 🔥 BARRA DE BÚSQUEDA NUEVA 🔥 */
         .search-container { position: relative; margin-bottom: 15px; }
-        .search-input { width: 100%; padding: 12px 15px 12px 45px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; outline: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .search-input:focus { background: rgba(255,255,255,0.2); border-color: var(--accent-blue); }
+        .search-input { width: 100%; padding: 12px 15px 12px 45px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); background: var(--input-bg); color: var(--text-main); outline: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .search-input:focus { border-color: var(--accent-blue); background: rgba(255,255,255,0.2); }
         .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 16px; opacity: 0.7; }
 
         .filter-scroll { overflow-x: auto; white-space: nowrap; padding-bottom: 10px; margin-bottom: 15px; -webkit-overflow-scrolling: touch; }
         .filter-scroll::-webkit-scrollbar { display: none; }
-        .filter-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 20px; margin-right: 8px; font-size: 13px; cursor: pointer; transition: 0.3s; }
-        .filter-btn.active { background: var(--accent-blue); border-color: var(--accent-blue); font-weight: 800; }
+        .filter-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: var(--text-main); padding: 8px 16px; border-radius: 20px; margin-right: 8px; font-size: 13px; cursor: pointer; transition: 0.3s; }
+        .filter-btn.active { background: var(--accent-blue); border-color: var(--accent-blue); font-weight: 800; color: white; }
 
         .category-select { width: 100%; padding: 14px 20px; margin-bottom: 10px; border-radius: 18px; background-color: #f8fafc; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 16px center; background-size: 16px; border: 2px solid #cbd5e1; font-size: 14px; color: #0f172a; font-weight: 800; -webkit-appearance: none; appearance: none; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.05); outline: none; }
         .month-separator { background: rgba(59, 130, 246, 0.2); color: #93c5fd; padding: 8px 20px; border-radius: 50px; font-size: 12px; font-weight: 800; text-align: center; margin: 30px 0 15px 0; border: 1px solid rgba(59, 130, 246, 0.3); letter-spacing: 2px; text-transform: uppercase; }
@@ -39,10 +67,10 @@
         .btn-post { color: white; padding: 16px; border-radius: 18px; font-weight: 700; cursor: pointer; display: block; text-align: center; margin-bottom: 10px; transition: transform 0.2s; border:none; width:100%; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .btn-post:active { transform: scale(0.95); }
         
-        #create-post-box { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 25px; }
+        #create-post-box { background: var(--input-bg); padding: 15px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 25px; }
         #status-msg { text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 15px; min-height: 15px; font-weight: bold; }
 
-        .post { background: #e2e8f0; border-radius: 28px; padding: 20px; margin-bottom: 25px; color: #0f172a; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 2px solid #cbd5e1; }
+        .post { background: var(--card-bg); border-radius: 28px; padding: 20px; margin-bottom: 25px; color: var(--card-text); position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 2px solid #cbd5e1; transition: background 0.3s; }
         .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .post-author { font-weight: 800; color: #1d4ed8; font-size: 14px; }
         .category-badge { font-size: 10px; background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 8px; font-weight: 800; margin-left: 8px; text-transform: uppercase; border: 1px solid #bfdbfe; }
@@ -84,7 +112,7 @@
 <div id="login-screen">
     <div class="login-card">
         <div style="font-size: 45px; margin-bottom: 15px;">🧪</div>
-        <h2 style="color: white; margin: 0;">Laboratorio Búsqueda</h2>
+        <h2 style="color: white; margin: 0;">Laboratorio Final</h2>
         <input type="password" id="passInput" placeholder="Clave de acceso">
         <button id="btnEntrar">ENTRAR AL LAB</button>
     </div>
@@ -92,8 +120,13 @@
 
 <div id="app-content">
     <header>
-        <h1 style="font-size: 18px; margin:0; color:white;">Familia (LAB)</h1>
-        <button onclick="localStorage.removeItem('familia_auth_lab'); location.reload();" style="background:rgba(255,255,255,0.1); color:#94a3b8; border:none; padding:10px; border-radius:10px; cursor:pointer;">Salir 🔒</button>
+        <div style="display:flex; align-items:center;">
+            <h1 style="font-size: 18px; margin:0; color:var(--text-main);">Familia (LAB)</h1>
+        </div>
+        <div>
+            <button id="theme-toggle" onclick="toggleTheme()">☀️</button>
+            <button onclick="localStorage.removeItem('familia_auth_lab'); location.reload();" style="background:rgba(255,255,255,0.1); color:#94a3b8; border:none; padding:10px; border-radius:10px; cursor:pointer;">Salir 🔒</button>
+        </div>
     </header>
     <div class="container">
         
@@ -110,7 +143,7 @@
         </div>
 
         <div id="create-post-box">
-            <h3 style="margin-top:0; font-size:14px; color:#e2e8f0; text-align:center;">NUEVA PUBLICACIÓN</h3>
+            <h3 style="margin-top:0; font-size:14px; color:#94a3b8; text-align:center;">NUEVA PUBLICACIÓN</h3>
             <select id="categoriaInput" class="category-select">
                 <option value="Familia">🏠 Categoria (Familia)</option>
                 <option value="Fiestas">🎉 Categoria (Fiestas)</option>
@@ -176,6 +209,21 @@
     window.abrirLupa = (url) => { document.getElementById('modal-img').src = url; document.getElementById('photo-modal').style.display = 'flex'; };
     window.cerrarLupa = () => { document.getElementById('photo-modal').style.display = 'none'; };
 
+    // ☀️ MODO DÍA/NOCHE
+    window.toggleTheme = () => {
+        document.body.classList.toggle('light-mode');
+        let btn = document.getElementById('theme-toggle');
+        if(document.body.classList.contains('light-mode')) {
+            btn.innerText = '🌙';
+            localStorage.setItem('theme', 'light');
+        } else {
+            btn.innerText = '☀️';
+            localStorage.setItem('theme', 'dark');
+        }
+    };
+    // Cargar tema guardado
+    if(localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); document.getElementById('theme-toggle').innerText = '🌙'; }
+
     document.getElementById('fotoInput').onchange = (e) => {
         archivosSeleccionados = e.target.files;
         if(archivosSeleccionados.length > 5) { alert("Máximo 5 fotos."); archivosSeleccionados = []; return; }
@@ -238,7 +286,7 @@
 
     window.filtrar = (cat) => { filtroActual = cat; document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.remove('active'); if(btn.innerText.includes(cat) || (cat === 'Todo' && btn.innerText === 'Todo')) btn.classList.add('active'); }); pintarMuro(); };
 
-    // 🔥 LOGICA DEL BUSCADOR 🔥
+    // 🔥 BUSCADOR (CON BÚSQUEDA DE TEXTO)
     document.getElementById('searchInput').addEventListener('input', (e) => {
         const textoBusqueda = e.target.value.toLowerCase();
         pintarMuro(textoBusqueda);
@@ -250,7 +298,6 @@
         const miNombre = localStorage.getItem('user_n_lab'); 
         let ultimoMes = "";
         
-        // FILTRO COMBINADO: CATEGORÍA + BÚSQUEDA DE TEXTO
         const postsAmostrar = todosLosPosts.filter(p => {
             const cumpleCategoria = (filtroActual === 'Todo' || p.categoria === filtroActual);
             const cumpleBusqueda = (p.texto || "").toLowerCase().includes(busqueda) || 
@@ -273,7 +320,11 @@
 
             if (mesActual !== ultimoMes) { muro.innerHTML += `<div class="month-separator">${mesActual}</div>`; ultimoMes = mesActual; }
 
-            let imagenesArray = data.fotos || []; let carouselHtml = imagenesArray.length > 0 ? `<div class="post-carousel">` + imagenesArray.map(url => `<img src="${url}" onclick="window.abrirLupa('${url}')">`).join('') + `</div>` : "";
+            // ✅ AQUÍ ESTÁ EL ARREGLO PARA FOTOS VIEJAS:
+            let imagenesArray = data.fotos || []; 
+            if(imagenesArray.length === 0 && data.foto) imagenesArray = [data.foto]; 
+            
+            let carouselHtml = imagenesArray.length > 0 ? `<div class="post-carousel">` + imagenesArray.map(url => `<img src="${url}" onclick="window.abrirLupa('${url}')">`).join('') + `</div>` : "";
             let audioHtml = data.audio ? `<audio controls src="${data.audio}" style="width:100%; margin-top:10px; margin-bottom: 10px; border-radius: 10px;"></audio>` : "";
             let comentariosHtml = data.comentarios ? data.comentarios.map(c => `<div class="comment"><b>${c.autor}:</b> ${c.texto}</div>`).join('') : "";
 
