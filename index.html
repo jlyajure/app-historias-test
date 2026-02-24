@@ -22,6 +22,12 @@
         header { background: rgba(15, 23, 42, 0.9); padding: 20px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .container { max-width: 480px; margin: auto; padding: 20px 15px; }
 
+        /* 🔥 BARRA DE BÚSQUEDA NUEVA 🔥 */
+        .search-container { position: relative; margin-bottom: 15px; }
+        .search-input { width: 100%; padding: 12px 15px 12px 45px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; outline: none; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .search-input:focus { background: rgba(255,255,255,0.2); border-color: var(--accent-blue); }
+        .search-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); font-size: 16px; opacity: 0.7; }
+
         .filter-scroll { overflow-x: auto; white-space: nowrap; padding-bottom: 10px; margin-bottom: 15px; -webkit-overflow-scrolling: touch; }
         .filter-scroll::-webkit-scrollbar { display: none; }
         .filter-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 16px; border-radius: 20px; margin-right: 8px; font-size: 13px; cursor: pointer; transition: 0.3s; }
@@ -49,35 +55,14 @@
         .post-carousel::-webkit-scrollbar-thumb { background: #64748b; border-radius: 10px; }
         .post-carousel img { scroll-snap-align: center; flex: 0 0 100%; width: 100%; border-radius: 20px; object-fit: cover; cursor: pointer; border: 1px solid #cbd5e1; }
         
-        /* 🔥 ZONA DE REACCIONES NUEVA 🔥 */
+        /* ZONA DE REACCIONES */
         .reaction-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; position: relative; }
-        
-        /* Botón principal de Reacción */
         .btn-reaction-trigger { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 800; font-size: 14px; transition: 0.2s; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .btn-reaction-trigger:active { transform: scale(0.95); }
-        
-        /* Panel Desplegable de Emojis */
-        .reaction-dock { 
-            display: none; 
-            position: absolute; 
-            bottom: 45px; 
-            left: 0; 
-            background: white; 
-            padding: 8px; 
-            border-radius: 50px; 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
-            gap: 10px; 
-            z-index: 100; 
-            animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid #e2e8f0;
-        }
+        .reaction-dock { display: none; position: absolute; bottom: 45px; left: 0; background: white; padding: 8px; border-radius: 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); gap: 10px; z-index: 100; animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 2px solid #e2e8f0; }
         @keyframes popUp { from { transform: scale(0.5) translateY(10px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
-        
         .reaction-option { font-size: 24px; cursor: pointer; transition: transform 0.2s; user-select: none; }
         .reaction-option:hover { transform: scale(1.3); }
-        .reaction-option:active { transform: scale(0.9); }
-
-        /* Lista de reacciones debajo */
         .reactions-display { font-size: 11px; color: #475569; font-weight: 700; font-style: italic; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
         .mini-reaction-icon { font-size: 14px; margin-right: 2px; }
 
@@ -99,7 +84,7 @@
 <div id="login-screen">
     <div class="login-card">
         <div style="font-size: 45px; margin-bottom: 15px;">🧪</div>
-        <h2 style="color: white; margin: 0;">Laboratorio Reacciones</h2>
+        <h2 style="color: white; margin: 0;">Laboratorio Búsqueda</h2>
         <input type="password" id="passInput" placeholder="Clave de acceso">
         <button id="btnEntrar">ENTRAR AL LAB</button>
     </div>
@@ -112,6 +97,11 @@
     </header>
     <div class="container">
         
+        <div class="search-container">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Buscar recuerdos (ej: playa, cumpleaños)...">
+        </div>
+
         <div class="filter-scroll">
             <button class="filter-btn active" onclick="filtrar('Todo')">Todo</button>
             <button class="filter-btn" onclick="filtrar('Familia')">🏠 Familia</button>
@@ -186,14 +176,12 @@
     window.abrirLupa = (url) => { document.getElementById('modal-img').src = url; document.getElementById('photo-modal').style.display = 'flex'; };
     window.cerrarLupa = () => { document.getElementById('photo-modal').style.display = 'none'; };
 
-    // 📸 SELECCIONAR FOTOS
     document.getElementById('fotoInput').onchange = (e) => {
         archivosSeleccionados = e.target.files;
         if(archivosSeleccionados.length > 5) { alert("Máximo 5 fotos."); archivosSeleccionados = []; return; }
         if(archivosSeleccionados.length > 0) { document.getElementById('labelFoto').innerHTML = `✅ ${archivosSeleccionados.length} FOTO(S)`; document.getElementById('labelFoto').style.background = "#25d366"; }
     };
 
-    // 🎙️ GRABAR AUDIO
     document.getElementById('btnGrabar').onclick = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -217,7 +205,6 @@
     document.getElementById('btnStop').onclick = () => { if(mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop(); };
     document.getElementById('btnBorrarAudio').onclick = () => { audioBlob = null; audioChunks = []; document.getElementById('audioPreview').src = ""; document.getElementById('audioPreview').style.display = 'none'; document.getElementById('btnBorrarAudio').style.display = 'none'; document.getElementById('btnGrabar').innerText = "🎙️ AUDIO"; document.getElementById('btnGrabar').style.background = "#ef4444"; };
 
-    // 🚀 PUBLICAR
     document.getElementById('btnPublicarTodo').onclick = async () => {
         const nombre = getNombre(); if (!nombre) return;
         if(archivosSeleccionados.length === 0 && !audioBlob) { alert("⚠️ Agrega al menos una foto o graba un audio."); return; }
@@ -236,15 +223,12 @@
             let base64Audio = null;
             if(audioBlob) { status.innerHTML = "🎙️ Subiendo audio..."; base64Audio = await new Promise((r) => { const reader = new FileReader(); reader.readAsDataURL(audioBlob); reader.onloadend = () => r(reader.result); }); }
             status.innerHTML = "📝 Guardando...";
-            await addDoc(collection(db, "mensajes"), { texto: mensaje || "", fotos: urlsSubidas, audio: base64Audio, autor: nombre, categoria: cat, fecha: new Date(), reacciones: {}, comentarios: [] }); // ⚠️ OJO: Nuevo campo 'reacciones'
+            await addDoc(collection(db, "mensajes"), { texto: mensaje || "", fotos: urlsSubidas, audio: base64Audio, autor: nombre, categoria: cat, fecha: new Date(), reacciones: {}, comentarios: [] });
             status.innerHTML = "✅ ¡Listo!";
             archivosSeleccionados = []; audioBlob = null; document.getElementById('fotoInput').value = ""; document.getElementById('labelFoto').innerHTML = "📸 FOTOS"; document.getElementById('labelFoto').style.background = "#64748b"; document.getElementById('btnGrabar').innerText = "🎙️ AUDIO"; document.getElementById('btnGrabar').style.background = "#ef4444"; document.getElementById('audioPreview').style.display = 'none'; document.getElementById('audioPreview').src = ""; document.getElementById('btnBorrarAudio').style.display = 'none'; document.getElementById('btnPublicarTodo').style.display = 'block';
         } catch (err) { status.innerHTML = "❌ Error."; alert("Error: " + err.message); document.getElementById('btnPublicarTodo').style.display = 'block'; }
     };
 
-    // ==========================================
-    // PINTAR MURO
-    // ==========================================
     const q = query(collection(db, "mensajes"), orderBy("fecha", "desc"));
     onSnapshot(q, (snapshot) => {
         todosLosPosts = [];
@@ -254,14 +238,32 @@
 
     window.filtrar = (cat) => { filtroActual = cat; document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.remove('active'); if(btn.innerText.includes(cat) || (cat === 'Todo' && btn.innerText === 'Todo')) btn.classList.add('active'); }); pintarMuro(); };
 
-    function pintarMuro() {
+    // 🔥 LOGICA DEL BUSCADOR 🔥
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const textoBusqueda = e.target.value.toLowerCase();
+        pintarMuro(textoBusqueda);
+    });
+
+    function pintarMuro(busqueda = "") {
         const muro = document.getElementById('muro'); muro.innerHTML = "";
         const esAdmin = localStorage.getItem('familia_auth_lab') === "ticoadmin2026";
         const miNombre = localStorage.getItem('user_n_lab'); 
         let ultimoMes = "";
-        const postsAmostrar = todosLosPosts.filter(p => filtroActual === 'Todo' || p.categoria === filtroActual);
+        
+        // FILTRO COMBINADO: CATEGORÍA + BÚSQUEDA DE TEXTO
+        const postsAmostrar = todosLosPosts.filter(p => {
+            const cumpleCategoria = (filtroActual === 'Todo' || p.categoria === filtroActual);
+            const cumpleBusqueda = (p.texto || "").toLowerCase().includes(busqueda) || 
+                                   (p.autor || "").toLowerCase().includes(busqueda) ||
+                                   (p.categoria || "").toLowerCase().includes(busqueda);
+            return cumpleCategoria && cumpleBusqueda;
+        });
 
-        if(postsAmostrar.length === 0) { muro.innerHTML = `<div style="text-align:center; padding:30px; color:#94a3b8;">No hay publicaciones en el laboratorio...</div>`; return; }
+        if(postsAmostrar.length === 0) { 
+            if(busqueda) muro.innerHTML = `<div style="text-align:center; padding:30px; color:#94a3b8;">No encontré nada con "${busqueda}" 🕵️‍♂️</div>`;
+            else muro.innerHTML = `<div style="text-align:center; padding:30px; color:#94a3b8;">No hay publicaciones en el laboratorio...</div>`; 
+            return; 
+        }
 
         postsAmostrar.forEach((data) => {
             const fechaObj = data.fecha ? (typeof data.fecha.toDate === 'function' ? data.fecha.toDate() : new Date(data.fecha)) : new Date();
@@ -275,27 +277,16 @@
             let audioHtml = data.audio ? `<audio controls src="${data.audio}" style="width:100%; margin-top:10px; margin-bottom: 10px; border-radius: 10px;"></audio>` : "";
             let comentariosHtml = data.comentarios ? data.comentarios.map(c => `<div class="comment"><b>${c.autor}:</b> ${c.texto}</div>`).join('') : "";
 
-            // 🔥 LOGICA DE REACCIONES 🔥
-            let reacciones = data.reacciones || {}; // Objeto { "Pepe": "❤️", "Tico": "😂" }
-            
-            // Si el post es viejo y tiene 'likesBy', lo convertimos visualmente a '👍'
-            if(Object.keys(reacciones).length === 0 && data.likesBy && data.likesBy.length > 0) {
-                data.likesBy.forEach(u => reacciones[u] = "👍");
-            }
-
+            let reacciones = data.reacciones || {}; 
+            if(Object.keys(reacciones).length === 0 && data.likesBy && data.likesBy.length > 0) { data.likesBy.forEach(u => reacciones[u] = "👍"); }
             let miReaccion = reacciones[miNombre];
             let botonReaccionLabel = miReaccion ? `${miReaccion} TÚ` : `😊 Reaccionar`;
             let estiloBoton = miReaccion ? "background:#e0f2fe; color:#0284c7; border-color:#0284c7;" : "";
 
-            // Contar reacciones
-            let conteo = {};
-            Object.values(reacciones).forEach(r => { conteo[r] = (conteo[r] || 0) + 1; });
-            let textoReacciones = "";
-            let totalReacciones = 0;
+            let conteo = {}; Object.values(reacciones).forEach(r => { conteo[r] = (conteo[r] || 0) + 1; });
+            let textoReacciones = ""; let totalReacciones = 0;
             for (const [emoji, num] of Object.entries(conteo)) { textoReacciones += `<span class="mini-reaction-icon">${emoji}</span> `; totalReacciones += num; }
             if (totalReacciones > 0) textoReacciones += ` (${totalReacciones})`;
-            
-            // Nombres de quienes reaccionaron
             let nombres = Object.keys(reacciones).slice(0, 3).join(", ");
             if(Object.keys(reacciones).length > 3) nombres += ` y ${Object.keys(reacciones).length - 3} más`;
             if(totalReacciones > 0 && nombres) textoReacciones += ` · ${nombres}`;
@@ -304,19 +295,12 @@
                 <div class="post">
                     <div class="post-header">
                         <span class="post-author">👤 ${data.autor} <span class="category-badge">${catLabel}</span></span>
-                        <div>
-                            <span class="post-date">${fechaCorta}</span>
-                            ${esAdmin ? `<button class="btn-delete-admin" onclick="window.borrarPost('${data.id}')">🗑️</button>` : ""}
-                        </div>
+                        <div><span class="post-date">${fechaCorta}</span>${esAdmin ? `<button class="btn-delete-admin" onclick="window.borrarPost('${data.id}')">🗑️</button>` : ""}</div>
                     </div>
                     <p style="font-weight: 600;">${data.texto}</p>
-                    ${audioHtml} 
-                    ${carouselHtml} 
-
+                    ${audioHtml} ${carouselHtml} 
                     <div class="reaction-wrapper">
-                        <button class="btn-reaction-trigger" onclick="toggleDock('${data.id}')" style="${estiloBoton}">
-                            ${botonReaccionLabel}
-                        </button>
+                        <button class="btn-reaction-trigger" onclick="toggleDock('${data.id}')" style="${estiloBoton}">${botonReaccionLabel}</button>
                         <div id="dock-${data.id}" class="reaction-dock">
                             <span class="reaction-option" onclick="enviarReaccion('${data.id}', '👍')">👍</span>
                             <span class="reaction-option" onclick="enviarReaccion('${data.id}', '❤️')">❤️</span>
@@ -326,50 +310,21 @@
                             <span class="reaction-option" onclick="enviarReaccion('${data.id}', '🍻')">🍻</span>
                         </div>
                     </div>
-                    
                     <div class="reactions-display">${textoReacciones}</div>
-                    
                     <div class="comments-section" style="margin-top:10px;">${comentariosHtml}
-                        <div class="comment-input-group">
-                            <input type="text" id="input-${data.id}" class="comment-input" placeholder="Opinar...">
-                            <button class="btn-send-comment" onclick="enviarComentario('${data.id}')">Publicar</button>
-                        </div>
+                        <div class="comment-input-group"><input type="text" id="input-${data.id}" class="comment-input" placeholder="Opinar..."><button class="btn-send-comment" onclick="enviarComentario('${data.id}')">Publicar</button></div>
                     </div>
                 </div>`;
         });
     }
 
-    window.toggleDock = (id) => {
-        let dock = document.getElementById(`dock-${id}`);
-        let display = dock.style.display;
-        // Cierra todos los otros docks primero
-        document.querySelectorAll('.reaction-dock').forEach(d => d.style.display = 'none');
-        dock.style.display = (display === 'flex') ? 'none' : 'flex';
-    };
-
+    window.toggleDock = (id) => { let dock = document.getElementById(`dock-${id}`); let display = dock.style.display; document.querySelectorAll('.reaction-dock').forEach(d => d.style.display = 'none'); dock.style.display = (display === 'flex') ? 'none' : 'flex'; };
     window.enviarReaccion = async (id, emoji) => {
         const nombre = getNombre(); if(!nombre) return;
-        document.getElementById(`dock-${id}`).style.display = 'none'; // Cerrar dock
-        
-        const docRef = doc(db, "mensajes", id); 
-        const docSnap = await getDoc(docRef);
-        
-        if (docSnap.exists()) { 
-            const data = docSnap.data();
-            let reacciones = data.reacciones || {}; 
-            
-            // Si ya tenía esa misma reacción, la quitamos (toggle off)
-            if (reacciones[nombre] === emoji) {
-                delete reacciones[nombre];
-            } else {
-                // Si no, la ponemos o actualizamos
-                reacciones[nombre] = emoji;
-            }
-            
-            await updateDoc(docRef, { reacciones: reacciones });
-        }
+        document.getElementById(`dock-${id}`).style.display = 'none'; 
+        const docRef = doc(db, "mensajes", id); const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) { const data = docSnap.data(); let reacciones = data.reacciones || {}; if (reacciones[nombre] === emoji) { delete reacciones[nombre]; } else { reacciones[nombre] = emoji; } await updateDoc(docRef, { reacciones: reacciones }); }
     };
-
     window.enviarComentario = async (id) => { const input = document.getElementById(`input-${id}`); const nombre = getNombre(); if (!input.value || !nombre) return; await updateDoc(doc(db, "mensajes", id), { comentarios: arrayUnion({ autor: nombre, texto: input.value }) }); input.value = ""; };
     window.borrarPost = async (id) => { if(confirm("¿Borrar este recuerdo?")) await deleteDoc(doc(db, "mensajes", id)); };
 </script>
