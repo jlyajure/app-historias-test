@@ -3,16 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
     <title>Laboratorio Familia</title>
-    <meta name="apple-mobile-web-app-title" content="Familia">
-    <meta name="application-name" content="Familia">
-    
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0f172a">
-    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
@@ -41,9 +33,7 @@
         .btn-post { color: white; padding: 16px; border-radius: 18px; font-weight: 700; cursor: pointer; display: block; text-align: center; margin-bottom: 10px; transition: transform 0.2s; border:none; width:100%; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .btn-post:active { transform: scale(0.95); }
         
-        /* 🔥 NUEVA CAJA DE CREACIÓN UNIFICADA 🔥 */
         #create-post-box { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 25px; }
-
         #status-msg { text-align: center; font-size: 12px; color: #94a3b8; margin-bottom: 15px; min-height: 15px; font-weight: bold; }
 
         .post { background: #e2e8f0; border-radius: 28px; padding: 20px; margin-bottom: 25px; color: #0f172a; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 2px solid #cbd5e1; }
@@ -59,10 +49,37 @@
         .post-carousel::-webkit-scrollbar-thumb { background: #64748b; border-radius: 10px; }
         .post-carousel img { scroll-snap-align: center; flex: 0 0 100%; width: 100%; border-radius: 20px; object-fit: cover; cursor: pointer; border: 1px solid #cbd5e1; }
         
-        .swipe-indicator { font-size: 11px; color: #475569; text-align: right; margin-top: -5px; margin-bottom: 10px; font-style: italic; font-weight: 700; }
-        .btn-like { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; padding: 8px 18px; border-radius: 20px; cursor: pointer; font-weight: 800; display: inline-block; margin-bottom: 5px; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .btn-like.liked { background: #fff5f5; color: #ff4757; border-color: #ff4757; }
-        .likes-list { font-size: 11px; color: #475569; margin-bottom: 15px; margin-left: 5px; font-style: italic; font-weight: 700; }
+        /* 🔥 ZONA DE REACCIONES NUEVA 🔥 */
+        .reaction-wrapper { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; position: relative; }
+        
+        /* Botón principal de Reacción */
+        .btn-reaction-trigger { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; padding: 8px 14px; border-radius: 20px; cursor: pointer; font-weight: 800; font-size: 14px; transition: 0.2s; display: flex; align-items: center; gap: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .btn-reaction-trigger:active { transform: scale(0.95); }
+        
+        /* Panel Desplegable de Emojis */
+        .reaction-dock { 
+            display: none; 
+            position: absolute; 
+            bottom: 45px; 
+            left: 0; 
+            background: white; 
+            padding: 8px; 
+            border-radius: 50px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
+            gap: 10px; 
+            z-index: 100; 
+            animation: popUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid #e2e8f0;
+        }
+        @keyframes popUp { from { transform: scale(0.5) translateY(10px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }
+        
+        .reaction-option { font-size: 24px; cursor: pointer; transition: transform 0.2s; user-select: none; }
+        .reaction-option:hover { transform: scale(1.3); }
+        .reaction-option:active { transform: scale(0.9); }
+
+        /* Lista de reacciones debajo */
+        .reactions-display { font-size: 11px; color: #475569; font-weight: 700; font-style: italic; display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+        .mini-reaction-icon { font-size: 14px; margin-right: 2px; }
 
         .comments-section { background: #ffffff; padding: 12px; border-radius: 18px; border: 1px solid #cbd5e1; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .comment { font-size: 13px; margin-bottom: 8px; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; color: #1e293b; }
@@ -82,7 +99,7 @@
 <div id="login-screen">
     <div class="login-card">
         <div style="font-size: 45px; margin-bottom: 15px;">🧪</div>
-        <h2 style="color: white; margin: 0;">Laboratorio Pruebas</h2>
+        <h2 style="color: white; margin: 0;">Laboratorio Reacciones</h2>
         <input type="password" id="passInput" placeholder="Clave de acceso">
         <button id="btnEntrar">ENTRAR AL LAB</button>
     </div>
@@ -104,17 +121,14 @@
 
         <div id="create-post-box">
             <h3 style="margin-top:0; font-size:14px; color:#e2e8f0; text-align:center;">NUEVA PUBLICACIÓN</h3>
-            
             <select id="categoriaInput" class="category-select">
                 <option value="Familia">🏠 Categoria (Familia)</option>
                 <option value="Fiestas">🎉 Categoria (Fiestas)</option>
                 <option value="Jodedera">🤣 Categoria (Jodedera)</option>
             </select>
-            
             <div style="display:flex; gap:10px;">
                 <label for="fotoInput" id="labelFoto" class="btn-post" style="background:#64748b; font-size:13px; margin-bottom:0; flex:1;">📸 FOTOS</label>
                 <input type="file" id="fotoInput" style="display:none;" accept="image/*" multiple>
-
                 <button id="btnGrabar" class="btn-post" style="background:#ef4444; font-size:13px; margin-bottom:0; flex:1;">🎙️ AUDIO</button>
             </div>
             
@@ -122,9 +136,8 @@
                 🔴 Grabando... (<span id="relojAudio">0</span>s) 
                 <button id="btnStop" style="margin-left:10px; background:#0f172a; color:white; border:none; padding:8px 15px; border-radius:10px; cursor:pointer; font-weight:bold;">Parar ⏹️</button>
             </div>
-            
             <audio id="audioPreview" controls style="display:none; width: 100%; margin-top: 15px; border-radius: 10px;"></audio>
-
+            <button id="btnBorrarAudio" class="btn-post" style="display:none; background:#64748b; font-size:13px; margin-top:5px; padding:10px;">🗑️ DESCARTAR AUDIO</button>
             <button id="btnPublicarTodo" class="btn-post" style="background: var(--wa-green); margin-top: 15px; font-size:16px;">🚀 PUBLICAR</button>
             <div id="status-msg" style="margin-top:10px; margin-bottom:0;"></div>
         </div>
@@ -145,7 +158,7 @@
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc, updateDoc, arrayUnion, arrayRemove, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = { apiKey: "AIzaSyBwBq4gLgv4DSfUidzUuC7Irmvj_4pCTtI", authDomain: "familia-yajure-app.firebaseapp.com", projectId: "familia-yajure-app", storageBucket: "familia-yajure-app.firebasestorage.app", messagingSenderId: "692035727386", appId: "1:692035727386:web:dfa3e39a481d56368a61a3" };
     const app = initializeApp(firebaseConfig);
@@ -157,7 +170,6 @@
     let todosLosPosts = [];
     let filtroActual = 'Todo';
 
-    // VARIABLES GLOBALES PARA LA PUBLICACIÓN
     let archivosSeleccionados = [];
     let mediaRecorder;
     let audioChunks = [];
@@ -177,125 +189,61 @@
     // 📸 SELECCIONAR FOTOS
     document.getElementById('fotoInput').onchange = (e) => {
         archivosSeleccionados = e.target.files;
-        if(archivosSeleccionados.length > 0) {
-            document.getElementById('labelFoto').innerHTML = `✅ ${archivosSeleccionados.length} FOTO(S)`;
-            document.getElementById('labelFoto').style.background = "#25d366";
-        }
+        if(archivosSeleccionados.length > 5) { alert("Máximo 5 fotos."); archivosSeleccionados = []; return; }
+        if(archivosSeleccionados.length > 0) { document.getElementById('labelFoto').innerHTML = `✅ ${archivosSeleccionados.length} FOTO(S)`; document.getElementById('labelFoto').style.background = "#25d366"; }
     };
 
     // 🎙️ GRABAR AUDIO
     document.getElementById('btnGrabar').onclick = async () => {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            mediaRecorder = new MediaRecorder(stream);
-            mediaRecorder.start();
-            audioChunks = [];
-            
+            mediaRecorder = new MediaRecorder(stream); mediaRecorder.start(); audioChunks = [];
             let segundos = 0; document.getElementById('relojAudio').innerText = "0";
             secInterval = setInterval(() => { segundos++; document.getElementById('relojAudio').innerText = segundos; }, 1000);
-
             recordTimer = setTimeout(() => { if(mediaRecorder.state === "recording") mediaRecorder.stop(); }, 30000);
-
             mediaRecorder.addEventListener("dataavailable", event => { audioChunks.push(event.data); });
-
             mediaRecorder.addEventListener("stop", () => {
                 clearTimeout(recordTimer); clearInterval(secInterval);
                 audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                 const audioUrl = URL.createObjectURL(audioBlob);
-                document.getElementById('audioPreview').src = audioUrl;
-                document.getElementById('audioPreview').style.display = 'block';
+                document.getElementById('audioPreview').src = audioUrl; document.getElementById('audioPreview').style.display = 'block';
                 document.getElementById('recording-status').style.display = 'none';
-                document.getElementById('btnGrabar').innerText = "✅ AUDIO LISTO";
-                document.getElementById('btnGrabar').style.background = "#25d366";
-                document.getElementById('btnGrabar').style.display = 'block';
+                document.getElementById('btnGrabar').innerText = "✅ AUDIO LISTO"; document.getElementById('btnGrabar').style.background = "#25d366"; document.getElementById('btnGrabar').style.display = 'block';
+                document.getElementById('btnBorrarAudio').style.display = 'block';
             });
-
-            document.getElementById('recording-status').style.display = 'block';
-            document.getElementById('btnGrabar').style.display = 'none';
-            document.getElementById('audioPreview').style.display = 'none';
-
+            document.getElementById('recording-status').style.display = 'block'; document.getElementById('btnGrabar').style.display = 'none'; document.getElementById('audioPreview').style.display = 'none'; document.getElementById('btnBorrarAudio').style.display = 'none';
         } catch (err) { alert("⚠️ Dale permiso al micrófono."); }
     };
-
     document.getElementById('btnStop').onclick = () => { if(mediaRecorder && mediaRecorder.state === "recording") mediaRecorder.stop(); };
+    document.getElementById('btnBorrarAudio').onclick = () => { audioBlob = null; audioChunks = []; document.getElementById('audioPreview').src = ""; document.getElementById('audioPreview').style.display = 'none'; document.getElementById('btnBorrarAudio').style.display = 'none'; document.getElementById('btnGrabar').innerText = "🎙️ AUDIO"; document.getElementById('btnGrabar').style.background = "#ef4444"; };
 
-    // 🚀 PUBLICAR TODO JUNTO (FOTO + AUDIO + TEXTO)
+    // 🚀 PUBLICAR
     document.getElementById('btnPublicarTodo').onclick = async () => {
         const nombre = getNombre(); if (!nombre) return;
-        
-        if(archivosSeleccionados.length === 0 && !audioBlob) {
-            alert("⚠️ Agrega al menos una foto o graba un audio para publicar.");
-            return;
-        }
-
-        const cat = document.getElementById('categoriaInput').value;
-        const mensaje = prompt(`✍️ Escribe un mensaje (Opcional):`);
-        const status = document.getElementById('status-msg');
-        
-        status.innerHTML = "⏳ Acelerando el motor... no cierres la App.";
-        document.getElementById('btnPublicarTodo').style.display = 'none';
-        
+        if(archivosSeleccionados.length === 0 && !audioBlob) { alert("⚠️ Agrega al menos una foto o graba un audio."); return; }
+        const cat = document.getElementById('categoriaInput').value; const mensaje = prompt(`✍️ Mensaje (Opcional):`); const status = document.getElementById('status-msg');
+        status.innerHTML = "⏳ Subiendo..."; document.getElementById('btnPublicarTodo').style.display = 'none';
         try {
-            // 1. Subir las fotos si hay alguna
             let urlsSubidas = [];
             if(archivosSeleccionados.length > 0) {
                 status.innerHTML = "🎨 Subiendo fotos...";
                 for(let i = 0; i < archivosSeleccionados.length; i++) {
-                    const formData = new FormData();
-                    formData.append("image", archivosSeleccionados[i]); 
+                    const formData = new FormData(); formData.append("image", archivosSeleccionados[i]); 
                     const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`, { method: "POST", body: formData });
-                    const imgData = await res.json();
-                    if (imgData.success) urlsSubidas.push(imgData.data.url);
+                    const imgData = await res.json(); if (imgData.success) urlsSubidas.push(imgData.data.url);
                 }
             }
-
-            // 2. Comprimir audio si hay alguno
             let base64Audio = null;
-            if(audioBlob) {
-                status.innerHTML = "🎙️ Empaquetando audio...";
-                base64Audio = await new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(audioBlob);
-                    reader.onloadend = () => resolve(reader.result);
-                });
-            }
-                
-            // 3. Guardar todo en la Base de Datos
-            status.innerHTML = "📝 Guardando en el muro...";
-            await addDoc(collection(db, "mensajes"), {
-                texto: mensaje || "", 
-                fotos: urlsSubidas, 
-                audio: base64Audio, 
-                autor: nombre, 
-                categoria: cat, 
-                fecha: new Date(),
-                likesBy: [],
-                comentarios: []
-            });
-            
-            status.innerHTML = "✅ ¡Publicación exitosa!";
-            
-            // 4. Resetear los botones a cero
-            archivosSeleccionados = [];
-            audioBlob = null;
-            document.getElementById('fotoInput').value = ""; 
-            document.getElementById('labelFoto').innerHTML = "📸 FOTOS";
-            document.getElementById('labelFoto').style.background = "#64748b";
-            document.getElementById('btnGrabar').innerText = "🎙️ AUDIO";
-            document.getElementById('btnGrabar').style.background = "#ef4444";
-            document.getElementById('audioPreview').style.display = 'none';
-            document.getElementById('audioPreview').src = "";
-            document.getElementById('btnPublicarTodo').style.display = 'block';
-
-        } catch (err) { 
-            status.innerHTML = "❌ Error al subir.";
-            alert("Error: " + err.message);
-            document.getElementById('btnPublicarTodo').style.display = 'block';
-        }
+            if(audioBlob) { status.innerHTML = "🎙️ Subiendo audio..."; base64Audio = await new Promise((r) => { const reader = new FileReader(); reader.readAsDataURL(audioBlob); reader.onloadend = () => r(reader.result); }); }
+            status.innerHTML = "📝 Guardando...";
+            await addDoc(collection(db, "mensajes"), { texto: mensaje || "", fotos: urlsSubidas, audio: base64Audio, autor: nombre, categoria: cat, fecha: new Date(), reacciones: {}, comentarios: [] }); // ⚠️ OJO: Nuevo campo 'reacciones'
+            status.innerHTML = "✅ ¡Listo!";
+            archivosSeleccionados = []; audioBlob = null; document.getElementById('fotoInput').value = ""; document.getElementById('labelFoto').innerHTML = "📸 FOTOS"; document.getElementById('labelFoto').style.background = "#64748b"; document.getElementById('btnGrabar').innerText = "🎙️ AUDIO"; document.getElementById('btnGrabar').style.background = "#ef4444"; document.getElementById('audioPreview').style.display = 'none'; document.getElementById('audioPreview').src = ""; document.getElementById('btnBorrarAudio').style.display = 'none'; document.getElementById('btnPublicarTodo').style.display = 'block';
+        } catch (err) { status.innerHTML = "❌ Error."; alert("Error: " + err.message); document.getElementById('btnPublicarTodo').style.display = 'block'; }
     };
 
     // ==========================================
-    // PINTAR EL MURO
+    // PINTAR MURO
     // ==========================================
     const q = query(collection(db, "mensajes"), orderBy("fecha", "desc"));
     onSnapshot(q, (snapshot) => {
@@ -307,8 +255,7 @@
     window.filtrar = (cat) => { filtroActual = cat; document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.remove('active'); if(btn.innerText.includes(cat) || (cat === 'Todo' && btn.innerText === 'Todo')) btn.classList.add('active'); }); pintarMuro(); };
 
     function pintarMuro() {
-        const muro = document.getElementById('muro');
-        muro.innerHTML = "";
+        const muro = document.getElementById('muro'); muro.innerHTML = "";
         const esAdmin = localStorage.getItem('familia_auth_lab') === "ticoadmin2026";
         const miNombre = localStorage.getItem('user_n_lab'); 
         let ultimoMes = "";
@@ -321,19 +268,37 @@
             const mesActual = fechaObj.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
             const fechaCorta = fechaObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
             const catLabel = data.categoria || "Familia"; 
-            const listaLikes = data.likesBy || [];
-            const yaDiLike = listaLikes.includes(miNombre); 
-            const totalVisual = listaLikes.length;
-            const textoLike = yaDiLike ? `❤️ Te gusta (${totalVisual})` : `🤍 Me gusta (${totalVisual})`;
 
             if (mesActual !== ultimoMes) { muro.innerHTML += `<div class="month-separator">${mesActual}</div>`; ultimoMes = mesActual; }
 
-            let imagenesArray = data.fotos || []; 
-            let carouselHtml = imagenesArray.length > 0 ? `<div class="post-carousel">` + imagenesArray.map(url => `<img src="${url}" onclick="window.abrirLupa('${url}')">`).join('') + `</div>` : "";
-            
+            let imagenesArray = data.fotos || []; let carouselHtml = imagenesArray.length > 0 ? `<div class="post-carousel">` + imagenesArray.map(url => `<img src="${url}" onclick="window.abrirLupa('${url}')">`).join('') + `</div>` : "";
             let audioHtml = data.audio ? `<audio controls src="${data.audio}" style="width:100%; margin-top:10px; margin-bottom: 10px; border-radius: 10px;"></audio>` : "";
-
             let comentariosHtml = data.comentarios ? data.comentarios.map(c => `<div class="comment"><b>${c.autor}:</b> ${c.texto}</div>`).join('') : "";
+
+            // 🔥 LOGICA DE REACCIONES 🔥
+            let reacciones = data.reacciones || {}; // Objeto { "Pepe": "❤️", "Tico": "😂" }
+            
+            // Si el post es viejo y tiene 'likesBy', lo convertimos visualmente a '👍'
+            if(Object.keys(reacciones).length === 0 && data.likesBy && data.likesBy.length > 0) {
+                data.likesBy.forEach(u => reacciones[u] = "👍");
+            }
+
+            let miReaccion = reacciones[miNombre];
+            let botonReaccionLabel = miReaccion ? `${miReaccion} TÚ` : `😊 Reaccionar`;
+            let estiloBoton = miReaccion ? "background:#e0f2fe; color:#0284c7; border-color:#0284c7;" : "";
+
+            // Contar reacciones
+            let conteo = {};
+            Object.values(reacciones).forEach(r => { conteo[r] = (conteo[r] || 0) + 1; });
+            let textoReacciones = "";
+            let totalReacciones = 0;
+            for (const [emoji, num] of Object.entries(conteo)) { textoReacciones += `<span class="mini-reaction-icon">${emoji}</span> `; totalReacciones += num; }
+            if (totalReacciones > 0) textoReacciones += ` (${totalReacciones})`;
+            
+            // Nombres de quienes reaccionaron
+            let nombres = Object.keys(reacciones).slice(0, 3).join(", ");
+            if(Object.keys(reacciones).length > 3) nombres += ` y ${Object.keys(reacciones).length - 3} más`;
+            if(totalReacciones > 0 && nombres) textoReacciones += ` · ${nombres}`;
 
             muro.innerHTML += `
                 <div class="post">
@@ -345,13 +310,26 @@
                         </div>
                     </div>
                     <p style="font-weight: 600;">${data.texto}</p>
-                    
                     ${audioHtml} 
                     ${carouselHtml} 
 
-                    <button class="btn-like ${yaDiLike ? 'liked' : ''}" onclick="darLike('${data.id}')">${textoLike}</button>
-                    <div class="likes-list">${listaLikes.length > 0 ? `Le gusta a: <b>${listaLikes.join(", ")}</b>` : ""}</div>
-                    <div class="comments-section">${comentariosHtml}
+                    <div class="reaction-wrapper">
+                        <button class="btn-reaction-trigger" onclick="toggleDock('${data.id}')" style="${estiloBoton}">
+                            ${botonReaccionLabel}
+                        </button>
+                        <div id="dock-${data.id}" class="reaction-dock">
+                            <span class="reaction-option" onclick="enviarReaccion('${data.id}', '👍')">👍</span>
+                            <span class="reaction-option" onclick="enviarReaccion('${data.id}', '❤️')">❤️</span>
+                            <span class="reaction-option" onclick="enviarReaccion('${data.id}', '😂')">😂</span>
+                            <span class="reaction-option" onclick="enviarReaccion('${data.id}', '😮')">😮</span>
+                            <span class="reaction-option" onclick="enviarReaccion('${data.id}', '😢')">😢</span>
+                            <span class="reaction-option" onclick="enviarReaccion('${data.id}', '🍻')">🍻</span>
+                        </div>
+                    </div>
+                    
+                    <div class="reactions-display">${textoReacciones}</div>
+                    
+                    <div class="comments-section" style="margin-top:10px;">${comentariosHtml}
                         <div class="comment-input-group">
                             <input type="text" id="input-${data.id}" class="comment-input" placeholder="Opinar...">
                             <button class="btn-send-comment" onclick="enviarComentario('${data.id}')">Publicar</button>
@@ -361,7 +339,37 @@
         });
     }
 
-    window.darLike = async (id) => { const nombre = getNombre(); if(!nombre) return; const docRef = doc(db, "mensajes", id); const docSnap = await getDoc(docRef); if (docSnap.exists()) { const data = docSnap.data(); const lista = data.likesBy || []; if (lista.includes(nombre)) { await updateDoc(docRef, { likesBy: arrayRemove(nombre) }); } else { await updateDoc(docRef, { likesBy: arrayUnion(nombre) }); } } };
+    window.toggleDock = (id) => {
+        let dock = document.getElementById(`dock-${id}`);
+        let display = dock.style.display;
+        // Cierra todos los otros docks primero
+        document.querySelectorAll('.reaction-dock').forEach(d => d.style.display = 'none');
+        dock.style.display = (display === 'flex') ? 'none' : 'flex';
+    };
+
+    window.enviarReaccion = async (id, emoji) => {
+        const nombre = getNombre(); if(!nombre) return;
+        document.getElementById(`dock-${id}`).style.display = 'none'; // Cerrar dock
+        
+        const docRef = doc(db, "mensajes", id); 
+        const docSnap = await getDoc(docRef);
+        
+        if (docSnap.exists()) { 
+            const data = docSnap.data();
+            let reacciones = data.reacciones || {}; 
+            
+            // Si ya tenía esa misma reacción, la quitamos (toggle off)
+            if (reacciones[nombre] === emoji) {
+                delete reacciones[nombre];
+            } else {
+                // Si no, la ponemos o actualizamos
+                reacciones[nombre] = emoji;
+            }
+            
+            await updateDoc(docRef, { reacciones: reacciones });
+        }
+    };
+
     window.enviarComentario = async (id) => { const input = document.getElementById(`input-${id}`); const nombre = getNombre(); if (!input.value || !nombre) return; await updateDoc(doc(db, "mensajes", id), { comentarios: arrayUnion({ autor: nombre, texto: input.value }) }); input.value = ""; };
     window.borrarPost = async (id) => { if(confirm("¿Borrar este recuerdo?")) await deleteDoc(doc(db, "mensajes", id)); };
 </script>
